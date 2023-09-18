@@ -14,6 +14,7 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 ## Packages Used
 
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
+- [discordgo](https://github.com/bwmarrin/discordgo/)
 
 ## Environment Variables
 

@@ -6,10 +6,10 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func HandleRequest(ctx context.Context) error {
+func handler(ctx context.Context) error {
 	return nil
 }
 
 func main() {
-	lambda.Start(HandleRequest)
+	lambda.Start(handler)
 }
