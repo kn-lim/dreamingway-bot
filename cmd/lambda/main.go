@@ -117,6 +117,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 					log.Printf("Error! Couldn't marshal JSON: %s", err)
 					return events.APIGatewayProxyResponse{}, err
 				}
+				// log.Printf("Response Body: %s", string(response_body))
 
 				return events.APIGatewayProxyResponse{
 					StatusCode: 200,
