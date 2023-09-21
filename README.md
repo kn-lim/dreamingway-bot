@@ -31,3 +31,22 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 | Name | Description |
 | - | - |
 | `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
+
+## How to Build
+
+From the project directory: 
+
+`GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/lambda/`
+
+## AWS Setup
+
+1. Create a Lambda function on AWS.
+    - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
+    - For the `Architecture`, select `x86_64`.
+    - Under `Advanced Settings`, select:
+        - `Enable function URL`
+        - `Enable VPC` 
+2. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda function.
+3. In the `Configuration` tab, add in the required environment variables.
+4. Get the Lambda function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+    - If it saves properly, that indicates your Lambda function is properly configured to act as a Discord bot.

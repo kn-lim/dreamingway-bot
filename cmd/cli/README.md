@@ -1,6 +1,10 @@
 # dreamingway-bot: cli
 
-CLI app to handle syncing commands with Discord
+CLI app to handle syncing commands with Discord.
+
+## How to Run
+
+`go run ./cmd/cli/ -appid <APP_ID> -guildid <GUILD_ID> -token <TOKEN>`
 
 ## Flags
 
