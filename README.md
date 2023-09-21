@@ -16,6 +16,18 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
 - [discordgo](https://github.com/bwmarrin/discordgo/)
 
+# Using the Discord Bot
+
+## How to Build
+
+From the project directory: 
+
+`GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/lambda/`
+
+## Syncing Commands with Discord
+
+https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
+
 ## Environment Variables
 
 ### Discord Specific
@@ -31,12 +43,6 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 | Name | Description |
 | - | - |
 | `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
-
-## How to Build
-
-From the project directory: 
-
-`GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/lambda/`
 
 ## AWS Setup
 
