@@ -19,9 +19,9 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 ## How to Build
 
-From the project directory: 
+From the project home directory: 
 
-`GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/lambda/`
+`CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/lambda/`
 
 ## Syncing Commands with Discord
 
