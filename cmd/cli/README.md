@@ -4,6 +4,8 @@ CLI app to handle syncing commands with Discord.
 
 ## How to Run
 
+From the project home directory:
+
 `go run ./cmd/cli/ -appid <APP_ID> -guildid <GUILD_ID> -token <TOKEN>`
 
 ## Flags

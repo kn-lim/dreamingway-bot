@@ -5,7 +5,6 @@
 # dreamingway-bot
 
 ![Go](https://img.shields.io/github/go-mod/go-version/kn-lim/dreamingway-bot)
-![Build](https://github.com/kn-lim/dreamingway-bot/actions/workflows/build.yaml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/dreamingway-bot)](https://goreportcard.com/report/github.com/kn-lim/dreamingway-bot)
 ![License](https://img.shields.io/github/license/kn-lim/dreamingway-bot)
 
