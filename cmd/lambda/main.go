@@ -21,13 +21,13 @@ import (
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	public_key_bytes, err := hex.DecodeString(os.Getenv("DISCORD_BOT_PUBLIC_KEY"))
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errors.New("Error! Could not decode public key.")
+		return events.APIGatewayProxyResponse{}, errors.New("error! couldn't decode public key")
 	}
 	if request.Body == "" {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Body is empty"}`,
-		}, errors.New("Error! Body is empty.")
+		}, errors.New("error! body is empty")
 	}
 
 	var body []byte
@@ -35,7 +35,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	if request.IsBase64Encoded {
 		body_bytes, err := base64.StdEncoding.DecodeString(request.Body)
 		if err != nil {
-			return events.APIGatewayProxyResponse{}, errors.New(fmt.Sprintf("Error! Could not decode body [%s]: %s", body, err))
+			return events.APIGatewayProxyResponse{}, fmt.Errorf("error! couldn't decode body [%s]: %s", body, err)
 		}
 
 		body = body_bytes
@@ -51,7 +51,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-ed25519 header"}`,
-		}, errors.New("Error! Missing x-signature-ed25519 header.")
+		}, errors.New("error! missing x-signature-ed25519 header")
 	}
 
 	x_signature_time, ok := request.Headers["x-signature-timestamp"]
@@ -60,12 +60,12 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-timestamp header"}`,
-		}, errors.New("Error! Missing x-signature-timestamp header.")
+		}, errors.New("error! missing x-signature-timestamp header")
 	}
 
 	x_signature_bytes, err := hex.DecodeString(x_signature)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errors.New("Error! Could not decode signature.")
+		return events.APIGatewayProxyResponse{}, errors.New("error! couldn't decode signature")
 	}
 
 	signed_data := []byte(x_signature_time + string(body))
