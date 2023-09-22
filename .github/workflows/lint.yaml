@@ -4,9 +4,9 @@ on:
     branches:
       - main
     paths-ignore:
+      - '**.md'
       - '.gitignore'
       - 'LICENSE'
-      - 'README.md'
   pull_request:
 
 permissions:
