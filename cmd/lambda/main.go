@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/hex"
@@ -18,7 +17,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
 )
 
-func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	public_key_bytes, err := hex.DecodeString(os.Getenv("DISCORD_BOT_PUBLIC_KEY"))
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errors.New("error! couldn't decode public key")
