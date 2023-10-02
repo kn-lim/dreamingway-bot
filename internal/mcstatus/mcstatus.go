@@ -18,12 +18,15 @@ type MCStatusResponse struct {
 
 // GetMCStatus checks with mcstatus.io to get information about the Minecraft server
 func GetMCStatus() (bool, int, error) {
+	log.Println("GetMCStatus()")
+
 	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 	if serverURL == "" {
 		return false, 0, fmt.Errorf("PIXELMON_DOMAIN/PIXELMON_SUBDOMAIN environment variable not set")
 	}
 
 	url := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", serverURL)
+	log.Printf("%v", url)
 
 	resp, err := http.Get(url)
 	if err != nil {
