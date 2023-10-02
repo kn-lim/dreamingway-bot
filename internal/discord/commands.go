@@ -30,17 +30,11 @@ var (
 						Name:        "status",
 						Description: "Get the status of the Pixelmon server",
 					},
-					{
-						Type:        discordgo.ApplicationCommandOptionSubCommand,
-						Name:        "test",
-						Description: "Test command",
-					},
 				},
 			},
 			Handler: nil,
 			Options: map[string]func(*discordgo.Interaction) (discordgo.InteractionResponse, error){
 				"status": status,
-				"test":   test,
 			},
 		},
 	}

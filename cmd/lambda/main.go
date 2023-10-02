@@ -94,8 +94,6 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 				Body:       `{"type": 1}`,
 			}, nil
 		case interaction.Type == 2:
-			log.Printf("Recieved Packet: %v", interaction)
-
 			// Application Command
 			log.Printf("Recieved Application Command: %s", interaction.ApplicationCommandData().Name)
 

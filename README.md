@@ -43,6 +43,18 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 | - | - |
 | `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
 
+### Pixelmon Specific
+
+| Name | Description |
+| - | - |
+| `PIXELMON_NAME` | AWS Name Tag of Pixelmon EC2 Instance |
+| `PIXELMON_INSTANCE_ID` | AWS Instance ID of Pixelmon EC2 Instance |
+| `PIXELMON_REGION` | AWS Region of Pixelmon EC2 Instance |
+| `PIXELMON_HOSTED_ZONE_ID` | AWS Hosted Zone ID of Domain |
+| `PIXELMON_DOMAIN` | Domain of Pixelmon Server |
+| `PIXELMON_SUBDOMAIN` | Subdomain of Pixelmon Server |
+| `PIXELMON_RCON_PASSWORD` | RCON Password of Pixelmon Service |
+
 ## AWS Setup
 
 1. Create a Lambda function on AWS.
