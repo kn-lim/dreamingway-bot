@@ -32,6 +32,21 @@ func main() {
 		log.Fatalf("Error! Cannot open the session: %v", err)
 	}
 
+	// Get all commands currently available for the bot
+	curr_cmds, err := s.ApplicationCommands(*AppID, *GuildID)
+	if err != nil {
+		log.Fatal("Error! Couldn't get current commands!\n")
+	}
+
+	// Delete all commands
+	for _, cmd := range curr_cmds {
+		if err := s.ApplicationCommandDelete(*AppID, *GuildID, cmd.ID); err != nil {
+			log.Fatalf("Error! Couldn't delete command [%s]: %v", cmd.Name, err)
+		}
+	}
+	fmt.Println("Finished deleting all commands")
+
+	// Add commands
 	for i := range discord.Commands {
 		cmd := discord.Commands[i].Command
 		if _, err := s.ApplicationCommandCreate(*AppID, *GuildID, &cmd); err != nil {
