@@ -6,13 +6,13 @@ import (
 	"os"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
+	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
 )
 
 func status(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
 	log.Println("status")
 
-	result, online, err := mcstatus.GetMCStatus()
+	result, online, err := pixelmon.GetStatus()
 	if err != nil {
 		log.Printf("Error! Couldn't get status: %s", err)
 	}
@@ -24,7 +24,7 @@ func status(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
 		status = fmt.Sprintf("%v | Number of Online Players: %v", serverURL, online)
 	} else {
 		log.Printf("%v is offline", serverURL)
-		status = "Offline!"
+		status = fmt.Sprintf("%v | Currently Offline", serverURL)
 	}
 
 	return discordgo.InteractionResponse{
