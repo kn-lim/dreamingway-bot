@@ -94,10 +94,12 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 				Body:       `{"type": 1}`,
 			}, nil
 		case interaction.Type == 2:
+			log.Printf("Recieved Packet: %v", interaction)
+
 			// Application Command
 			log.Printf("Recieved Application Command: %s", interaction.ApplicationCommandData().Name)
 
-			handler, ok := discord.Commands[interaction.ApplicationCommandData().Name]
+			cmd, ok := discord.Commands[interaction.ApplicationCommandData().Name]
 			if !ok {
 				// log.Printf("Error! Command does not exist: %s", interaction.ApplicationCommandData().Name)
 				return events.APIGatewayProxyResponse{
@@ -106,7 +108,13 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 				}, nil
 			}
 
-			response, err := handler.Handler(&interaction)
+			var response discordgo.InteractionResponse
+			if cmd.Handler != nil {
+				response, err = cmd.Handler(&interaction)
+			} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
+				response, err = cmd.Options[interaction.ApplicationCommandData().Options[0].Name](&interaction)
+			}
+
 			if err != nil {
 				log.Printf("Error! Handler Error: %s", err)
 				return events.APIGatewayProxyResponse{}, err
