@@ -10,7 +10,7 @@ import (
 )
 
 func status(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
-	// log.Println("status")
+	log.Println("status")
 
 	result, online, err := mcstatus.GetMCStatus()
 	if err != nil {
@@ -18,9 +18,12 @@ func status(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
 	}
 
 	var status string
+	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 	if result {
-		status = fmt.Sprintf("%v | Number of Online Players: %v", fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN")), online)
+		log.Printf("%v is online", serverURL)
+		status = fmt.Sprintf("%v | Number of Online Players: %v", serverURL, online)
 	} else {
+		log.Printf("%v is offline", serverURL)
 		status = "Offline!"
 	}
 
