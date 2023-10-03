@@ -64,7 +64,10 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
     - For the `Architecture`, select `x86_64`.
     - Under `Advanced Settings`, select:
         - `Enable function URL`
-        - `Enable VPC` 
+          - Auth type: `NONE`
+          - Invoke mode: `BUFFERED (default)`
+          - Enable `Configure cross-origin resource sharing (CORS)`
+
 2. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda function.
 3. In the `Configuration` tab, add in the required environment variables.
 4. Get the Lambda function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
