@@ -1,5 +1,7 @@
 <p align="center">
-  <img width="100" src="https://raw.githubusercontent.com/kn-lim/dreamingway-bot/main/images/dreamingway.png"></img>
+  <img width="100" style="border-radius: 50%" src="https://raw.githubusercontent.com/kn-lim/dreamingway-bot/main/images/dreamingway.png"></img>
+  <br>
+  I'm a 🤖!
 </p>
 
 # dreamingway-bot
