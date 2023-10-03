@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
 )
 
