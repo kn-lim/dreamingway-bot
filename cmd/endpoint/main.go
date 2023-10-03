@@ -17,13 +17,13 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
 )
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handler(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	public_key_bytes, err := hex.DecodeString(os.Getenv("DISCORD_BOT_PUBLIC_KEY"))
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errors.New("error! couldn't decode public key")
+		return events.APIGatewayV2HTTPResponse{}, errors.New("error! couldn't decode public key")
 	}
 	if request.Body == "" {
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Body is empty"}`,
 		}, errors.New("error! body is empty")
@@ -34,7 +34,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	if request.IsBase64Encoded {
 		body_bytes, err := base64.StdEncoding.DecodeString(request.Body)
 		if err != nil {
-			return events.APIGatewayProxyResponse{}, fmt.Errorf("error! couldn't decode body [%s]: %s", body, err)
+			return events.APIGatewayV2HTTPResponse{}, fmt.Errorf("error! couldn't decode body [%s]: %s", body, err)
 		}
 
 		body = body_bytes
@@ -47,7 +47,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	x_signature, ok := request.Headers["x-signature-ed25519"]
 	if !ok {
 		log.Print("Received Signature Header Error (400)")
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-ed25519 header"}`,
 		}, errors.New("error! missing x-signature-ed25519 header")
@@ -56,7 +56,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	x_signature_time, ok := request.Headers["x-signature-timestamp"]
 	if !ok {
 		log.Print("Received Timestamp Header Error (400)")
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-timestamp header"}`,
 		}, errors.New("error! missing x-signature-timestamp header")
@@ -64,7 +64,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	x_signature_bytes, err := hex.DecodeString(x_signature)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errors.New("error! couldn't decode signature")
+		return events.APIGatewayV2HTTPResponse{}, errors.New("error! couldn't decode signature")
 	}
 
 	signed_data := []byte(x_signature_time + string(body))
@@ -72,7 +72,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	if !ed25519.Verify(public_key, signed_data, x_signature_bytes) {
 		// Unauthorized access
 		// log.Print("Received Unauthorized (401)")
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 401,
 		}, nil
 	} else {
@@ -80,7 +80,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		var interaction discordgo.Interaction
 		if err := json.Unmarshal(body, &interaction); err != nil {
 			log.Printf("Error! Could not decode interaction: %s", err)
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: 400,
 			}, nil
 		}
@@ -89,7 +89,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		case interaction.Type == 1:
 			// Ping (200)
 			log.Print("Received Ping (200)")
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: 200,
 				Body:       `{"type": 1}`,
 			}, nil
@@ -100,7 +100,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			cmd, ok := discord.Commands[interaction.ApplicationCommandData().Name]
 			if !ok {
 				// log.Printf("Error! Command does not exist: %s", interaction.ApplicationCommandData().Name)
-				return events.APIGatewayProxyResponse{
+				return events.APIGatewayV2HTTPResponse{
 					StatusCode: 404,
 					Body:       `{"error": "Command does not exist"}`,
 				}, nil
@@ -115,16 +115,16 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 			if err != nil {
 				log.Printf("Error! Handler Error: %s", err)
-				return events.APIGatewayProxyResponse{}, err
+				return events.APIGatewayV2HTTPResponse{}, err
 			} else {
 				response_body, err := json.Marshal(&response)
 				if err != nil {
 					log.Printf("Error! Couldn't marshal JSON: %s", err)
-					return events.APIGatewayProxyResponse{}, err
+					return events.APIGatewayV2HTTPResponse{}, err
 				}
 				// log.Printf("Response Body: %s", string(response_body))
 
-				return events.APIGatewayProxyResponse{
+				return events.APIGatewayV2HTTPResponse{
 					StatusCode: 200,
 					Body:       string(response_body),
 				}, nil
@@ -132,7 +132,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		default:
 			// Unknown (501)
 			// log.Print("Received Unknown (501)")
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: 501,
 			}, nil
 		}
