@@ -1,7 +1,7 @@
 <p align="center">
   <img width="100" style="border-radius: 50%" src="https://raw.githubusercontent.com/kn-lim/dreamingway-bot/main/images/dreamingway.png"></img>
   <br>
-  I'm a 🤖!
+  <i>I'm a</i> 🤖<i>!</i>
 </p>
 
 # dreamingway-bot
@@ -15,6 +15,7 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 ## Packages Used
 
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
+- [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2)
 - [discordgo](https://github.com/bwmarrin/discordgo/)
 
 # Using the Discord Bot
@@ -59,7 +60,7 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 
 ## AWS Setup
 
-1. Create a Lambda function on AWS.
+1. Create a Lambda endpoint function on AWS. 
     - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
     - For the `Architecture`, select `x86_64`.
     - Under `Advanced Settings`, select:
@@ -67,8 +68,12 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
           - Auth type: `NONE`
           - Invoke mode: `BUFFERED (default)`
           - Enable `Configure cross-origin resource sharing (CORS)`
-
-2. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda function.
-3. In the `Configuration` tab, add in the required environment variables.
-4. Get the Lambda function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+2. Create a Lambda task function on AWS. 
+    - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
+    - For the `Architecture`, select `x86_64`.
+    - Under `Advanced Settings`, select:
+        - `Enable VPC`
+3. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda functions.
+4. In the `Configuration` tab, add in the required environment variables.
+5. Get the Lambda endpoint function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
     - If it saves properly, that indicates your Lambda function is properly configured to act as a Discord bot.
