@@ -55,6 +55,7 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 | Name | Description |
 | - | - |
 | `DISCORD_API_VERSION` | Discord API Version |
+| `DISCORD_BOT_TOKEN` | Discord Bot Token |
 
 #### Commands
 

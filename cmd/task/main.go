@@ -21,15 +21,35 @@ func handler(interaction discordgo.Interaction) error {
 
 	log.Println(url)
 
-	payloadBytes, _ := json.Marshal(discordgo.InteractionResponse{
+	payloadBytes, err := json.Marshal(discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This is from the task lambda!",
 		},
 	})
+	if err != nil {
+		log.Fatalf("Error! Couldn't marshal JSON: %v", err)
+	}
 
-	resp, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(payloadBytes))
-	defer resp.Body.Close()
+	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		log.Fatalf("Error! Couldn't create http request: %v", err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		log.Fatalf("Error! Couldn't send the http request: %v", err)
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		var result map[string]interface{}
+		json.NewDecoder(response.Body).Decode(&result)
+		log.Fatalf("Error! Discord API Error: %v", result)
+	}
 
 	return nil
 }
