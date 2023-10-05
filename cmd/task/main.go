@@ -14,12 +14,14 @@ import (
 )
 
 func handler(interaction discordgo.Interaction) error {
+	log.Printf("Received interaction: %+v\n", interaction)
+
 	application_id := interaction.AppID
 	interaction_token := interaction.Token
 
 	url := fmt.Sprintf("%v/%v/webhooks/%v/%v/messages/@original", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token)
 
-	log.Println(url)
+	log.Printf("Discord API URL: %s", url)
 
 	payloadBytes, err := json.Marshal(discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -48,9 +50,11 @@ func handler(interaction discordgo.Interaction) error {
 	if response.StatusCode != http.StatusOK {
 		var result map[string]interface{}
 		if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
-			log.Fatalf("Error! Couldn't decode result: %v", err)
+			log.Printf("Error! Couldn't decode result: %v", err)
+			return err
 		}
-		log.Fatalf("Error! Discord API Error: %v", result)
+		log.Printf("Error! Discord API Error: %v", result)
+		return fmt.Errorf("discord API error: %v", result)
 	}
 
 	return nil
