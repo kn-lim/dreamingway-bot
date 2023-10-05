@@ -23,7 +23,7 @@ func handler(interaction discordgo.Interaction) error {
 
 	log.Printf("Discord API URL: %s", url)
 
-	payloadBytes, err := json.Marshal(discordgo.InteractionResponse{
+	payloadBytes, err := json.Marshal(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This is from the task lambda!",
@@ -32,6 +32,8 @@ func handler(interaction discordgo.Interaction) error {
 	if err != nil {
 		log.Fatalf("Error! Couldn't marshal JSON: %v", err)
 	}
+
+	log.Printf("Sending payload: %s", string(payloadBytes))
 
 	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer(payloadBytes))
 	if err != nil {
