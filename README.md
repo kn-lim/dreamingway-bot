@@ -24,7 +24,8 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 From the project home directory: 
 
-`CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
+- Endpoint: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
+- Task: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
 
 ## Syncing Commands with Discord
 
@@ -88,8 +89,6 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 2. Create a Lambda task function on AWS. 
     - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
     - For the `Architecture`, select `x86_64`.
-    - Under `Advanced Settings`, select:
-        - `Enable VPC`
 3. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda functions.
 4. In the `Configuration` tab, add in the required environment variables.
 5. Get the Lambda endpoint function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
