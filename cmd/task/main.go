@@ -23,11 +23,8 @@ func handler(interaction discordgo.Interaction) error {
 
 	log.Printf("Discord API URL: %s", url)
 
-	payloadBytes, err := json.Marshal(&discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Content: "This is from the task lambda!",
-		},
+	payloadBytes, err := json.Marshal(map[string]string{
+		"content": "This is from the task lambda!",
 	})
 	if err != nil {
 		log.Fatalf("Error! Couldn't marshal JSON: %v", err)
@@ -35,7 +32,7 @@ func handler(interaction discordgo.Interaction) error {
 
 	log.Printf("Sending payload: %s", string(payloadBytes))
 
-	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer(payloadBytes))
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		log.Fatalf("Error! Couldn't create http request: %v", err)
 	}
