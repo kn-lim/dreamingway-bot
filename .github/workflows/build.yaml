@@ -22,16 +22,30 @@ jobs:
       with:
         go-version: '1.21.1'
 
-    - name: Build binary for Lambda
+    - name: Build endpoint binary for Lambda
       run: |
         CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bootstrap ./cmd/endpoint/
-        zip function.zip bootstrap
+        zip endpoint.zip bootstrap
 
-    - name: Upload binary to Lambda
+    - name: Build task binary for Lambda
+      run: |
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bootstrap ./cmd/task/
+        zip task.zip bootstrap
+
+    - name: Upload endpoint binary to Lambda
       uses: appleboy/lambda-action@v0.1.9
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_region: ${{ secrets.AWS_REGION }}
         function_name: ${{ vars.AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }}
-        zip_file: function.zip
+        zip_file: endpoint.zip
+
+    - name: Upload task binary to Lambda
+      uses: appleboy/lambda-action@v0.1.9
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: ${{ secrets.AWS_REGION }}
+        function_name: ${{ vars.AWS_LAMBDA_TASK_FUNCTION_NAME }}
+        zip_file: task.zip
