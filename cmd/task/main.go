@@ -47,7 +47,9 @@ func handler(interaction discordgo.Interaction) error {
 
 	if response.StatusCode != http.StatusOK {
 		var result map[string]interface{}
-		json.NewDecoder(response.Body).Decode(&result)
+		if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+			log.Fatalf("Error! Couldn't decode result: %v", err)
+		}
 		log.Fatalf("Error! Discord API Error: %v", result)
 	}
 
