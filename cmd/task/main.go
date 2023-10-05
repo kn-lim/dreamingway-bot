@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -17,6 +18,8 @@ func handler(interaction discordgo.Interaction) error {
 	interaction_token := interaction.Token
 
 	url := fmt.Sprintf("%v/%v/webhooks/%v/%v/messages/@original", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token)
+
+	log.Println(url)
 
 	payloadBytes, _ := json.Marshal(discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,

@@ -131,7 +131,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 				client := lambdaSvc.NewFromConfig(cfg)
 
-				payloadBytes, err := json.Marshal(interaction)
+				payloadBytes, err := json.Marshal(&interaction)
 				if err != nil {
 					log.Printf("Error! Couldn't marshal JSON payload: %s", err)
 					return events.LambdaFunctionURLResponse{}, err
@@ -146,6 +146,8 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 					log.Printf("Error! Couldn't invoke task function: %s", err)
 					return events.LambdaFunctionURLResponse{}, err
 				}
+
+				log.Printf("Invoked task lambda function for %s command", interaction.ApplicationCommandData().Name)
 
 				return events.LambdaFunctionURLResponse{
 					StatusCode: 200,
