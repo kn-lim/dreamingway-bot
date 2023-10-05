@@ -58,12 +58,6 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 | `DISCORD_API_VERSION` | Discord API Version |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 
-#### Commands
-
-| Name | Description |
-| - | - |
-| `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
-
 #### Pixelmon
 
 | Name | Description |
@@ -75,6 +69,7 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 | `PIXELMON_DOMAIN` | Domain of Pixelmon Server |
 | `PIXELMON_SUBDOMAIN` | Subdomain of Pixelmon Server |
 | `PIXELMON_RCON_PASSWORD` | RCON Password of Pixelmon Service |
+| `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
 
 ## AWS Setup
 
