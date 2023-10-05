@@ -28,13 +28,13 @@ func GetMCStatus() (bool, int, error) {
 	url := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", serverURL)
 	log.Printf("%v", url)
 
-	resp, err := http.Get(url)
+	response, err := http.Get(url)
 	if err != nil {
 		return false, 0, err
 	}
-	defer resp.Body.Close()
+	defer response.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return false, 0, err
 	}

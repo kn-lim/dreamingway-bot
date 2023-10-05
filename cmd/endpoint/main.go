@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/hex"
@@ -12,12 +13,16 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	lambdaSvc "github.com/aws/aws-sdk-go-v2/service/lambda"
+	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
 	"github.com/bwmarrin/discordgo"
 
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
 )
 
-func handler(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
+func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
 	public_key_bytes, err := hex.DecodeString(os.Getenv("DISCORD_BOT_PUBLIC_KEY"))
 	if err != nil {
 		return events.LambdaFunctionURLResponse{}, errors.New("error! couldn't decode public key")
@@ -106,13 +111,7 @@ func handler(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLR
 				}, nil
 			}
 
-			var response discordgo.InteractionResponse
-			if cmd.Handler != nil {
-				response, err = cmd.Handler(&interaction)
-			} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
-				response, err = cmd.Options[interaction.ApplicationCommandData().Options[0].Name](&interaction)
-			}
-
+			response, err := cmd.Handler(&interaction)
 			if err != nil {
 				log.Printf("Error! Handler Error: %s", err)
 				return events.LambdaFunctionURLResponse{}, err
@@ -122,7 +121,31 @@ func handler(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLR
 					log.Printf("Error! Couldn't marshal JSON: %s", err)
 					return events.LambdaFunctionURLResponse{}, err
 				}
-				// log.Printf("Response Body: %s", string(response_body))
+
+				// Invoke task lambda function
+				cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("AWS_REGION")))
+				if err != nil {
+					log.Printf("Error! Couldn't load AWS SDK config: %s", err)
+					return events.LambdaFunctionURLResponse{}, err
+				}
+
+				client := lambdaSvc.NewFromConfig(cfg)
+
+				payloadBytes, err := json.Marshal(interaction)
+				if err != nil {
+					log.Printf("Error! Couldn't marshal JSON payload: %s", err)
+					return events.LambdaFunctionURLResponse{}, err
+				}
+
+				input := &lambdaSvc.InvokeInput{
+					FunctionName:   aws.String(os.Getenv("TASK_FUNCTION_NAME")),
+					Payload:        payloadBytes,
+					InvocationType: types.InvocationTypeEvent,
+				}
+				if _, err := client.Invoke(ctx, input); err != nil {
+					log.Printf("Error! Couldn't invoke task function: %s", err)
+					return events.LambdaFunctionURLResponse{}, err
+				}
 
 				return events.LambdaFunctionURLResponse{
 					StatusCode: 200,

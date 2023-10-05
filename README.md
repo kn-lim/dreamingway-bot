@@ -32,7 +32,15 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 
 ## Environment Variables
 
-### Discord Specific
+### Endpoint Lambda Function
+
+#### AWS
+
+| Name | Description |
+| - | - |
+| `TASK_FUNCTION_NAME` | Name of the Task Lambda Function |
+
+#### Discord
 
 | Name | Description |
 | - | - |
@@ -40,13 +48,21 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 | `DISCORD_BOT_PUBLIC_KEY` | Discord Bot Public Key |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 
-### Commands
+### Task Lambda Function
+
+#### Discord
+
+| Name | Description |
+| - | - |
+| `DISCORD_API_VERSION` | Discord API Version |
+
+#### Commands
 
 | Name | Description |
 | - | - |
 | `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
 
-### Pixelmon Specific
+#### Pixelmon
 
 | Name | Description |
 | - | - |

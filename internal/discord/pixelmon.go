@@ -10,7 +10,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
 )
 
-func status(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
+func status(interaction *discordgo.Interaction) (discordgo.InteractionResponse, error) {
 	log.Println("status")
 
 	result, online, err := pixelmon.GetStatus()

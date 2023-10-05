@@ -32,7 +32,7 @@ var (
 					},
 				},
 			},
-			Handler: nil,
+			Handler: DeferredMessage,
 			Options: map[string]func(*discordgo.Interaction) (discordgo.InteractionResponse, error){
 				"status": status,
 			},
