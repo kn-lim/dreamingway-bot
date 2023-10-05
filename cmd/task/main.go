@@ -16,8 +16,9 @@ import (
 func handler(interaction discordgo.Interaction) error {
 	application_id := interaction.AppID
 	interaction_token := interaction.Token
+	message_id := interaction.Message.ID
 
-	url := fmt.Sprintf("%v/%v/webhooks/%v/%v/messages/@original", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token)
+	url := fmt.Sprintf("%v/%v/webhooks/%v/%v/messages/%v", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token, message_id)
 
 	log.Println(url)
 
