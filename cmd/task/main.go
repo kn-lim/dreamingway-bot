@@ -24,7 +24,7 @@ func handler(interaction discordgo.Interaction) error {
 	log.Printf("Discord API URL: %s", url)
 
 	payloadBytes, err := json.Marshal(&discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Type: discordgo.InteractionResponseUpdateMessage,
 		Data: &discordgo.InteractionResponseData{
 			Content: "This is from the task lambda!",
 		},

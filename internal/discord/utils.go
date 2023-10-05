@@ -6,6 +6,6 @@ const DiscordBaseURL = "https://discord.com/api"
 
 func DeferredMessage(i *discordgo.Interaction) (discordgo.InteractionResponse, error) {
 	return discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
 	}, nil
 }
