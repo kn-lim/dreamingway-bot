@@ -19,7 +19,7 @@ func handler(interaction discordgo.Interaction) error {
 	application_id := interaction.AppID
 	interaction_token := interaction.Token
 
-	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v/messages/@original", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token)
+	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v/", discord.DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), application_id, interaction_token)
 
 	log.Printf("Discord API URL: %s", url)
 
@@ -35,7 +35,7 @@ func handler(interaction discordgo.Interaction) error {
 
 	log.Printf("Sending payload: %s", string(payloadBytes))
 
-	request, err := http.NewRequest("PATCH", url, bytes.NewBuffer(payloadBytes))
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		log.Fatalf("Error! Couldn't create http request: %v", err)
 	}
