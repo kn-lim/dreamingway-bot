@@ -51,7 +51,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 	x_signature, ok := request.Headers["x-signature-ed25519"]
 	if !ok {
-		log.Print("Received Signature Header Error (400)")
+		// log.Println("Received Signature Header Error (400)")
 		return events.LambdaFunctionURLResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-ed25519 header"}`,
@@ -60,7 +60,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 	x_signature_time, ok := request.Headers["x-signature-timestamp"]
 	if !ok {
-		log.Print("Received Timestamp Header Error (400)")
+		// log.Println("Received Timestamp Header Error (400)")
 		return events.LambdaFunctionURLResponse{
 			StatusCode: 400,
 			Body:       `{"error": "Missing x-signature-timestamp header"}`,
@@ -76,7 +76,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 	if !ed25519.Verify(public_key, signed_data, x_signature_bytes) {
 		// Unauthorized access
-		// log.Print("Received Unauthorized (401)")
+		// log.Println("Received Unauthorized (401)")
 		return events.LambdaFunctionURLResponse{
 			StatusCode: 401,
 		}, nil
@@ -138,7 +138,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 					return events.LambdaFunctionURLResponse{}, err
 				}
 
-				log.Printf("Invoked task lambda function for %s command", interaction.ApplicationCommandData().Name)
+				// log.Printf("Invoked task lambda function for %s command", interaction.ApplicationCommandData().Name)
 
 				return events.LambdaFunctionURLResponse{
 					StatusCode: 200,
