@@ -24,8 +24,8 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 From the project home directory: 
 
-- Endpoint: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
-- Task: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
+- **Endpoint**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
+- **Task**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
 
 ## Syncing Commands with Discord
 
@@ -73,7 +73,7 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 
 ## AWS Setup
 
-1. Create a Lambda endpoint function on AWS. 
+1. Create an **endpoint** Lambda function on AWS. 
     - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
     - For the `Architecture`, select `x86_64`.
     - Under `Advanced Settings`, select:
@@ -81,10 +81,12 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
           - Auth type: `NONE`
           - Invoke mode: `BUFFERED (default)`
           - Enable `Configure cross-origin resource sharing (CORS)`
-2. Create a Lambda task function on AWS. 
+2. Create a **task** Lambda function on AWS. 
     - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
     - For the `Architecture`, select `x86_64`.
 3. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda functions.
-4. In the `Configuration` tab, add in the required environment variables.
-5. Get the Lambda endpoint function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+4. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
+5. Give the role the **task** Lambda function is using permission to access the AWS resources it will need.
+6. Get the Lambda endpoint function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
     - If it saves properly, that indicates your Lambda function is properly configured to act as a Discord bot.
+
