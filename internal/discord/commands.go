@@ -6,8 +6,8 @@ import (
 
 type Command struct {
 	Command discordgo.ApplicationCommand
-	Handler func(*discordgo.Interaction) (discordgo.InteractionResponse, error)
-	Options map[string]func(*discordgo.Interaction) (discordgo.InteractionResponse, error)
+	Handler func() (string, error)
+	Options map[string]func() (string, error)
 }
 
 var (
@@ -32,8 +32,8 @@ var (
 					},
 				},
 			},
-			Handler: DeferredMessage,
-			Options: map[string]func(*discordgo.Interaction) (discordgo.InteractionResponse, error){
+			Handler: nil,
+			Options: map[string]func() (string, error){
 				"status": status,
 			},
 		},

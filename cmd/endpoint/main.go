@@ -102,16 +102,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 			// Application Command
 			log.Printf("Recieved Application Command: %s", interaction.ApplicationCommandData().Name)
 
-			cmd, ok := discord.Commands[interaction.ApplicationCommandData().Name]
-			if !ok {
-				// log.Printf("Error! Command does not exist: %s", interaction.ApplicationCommandData().Name)
-				return events.LambdaFunctionURLResponse{
-					StatusCode: 404,
-					Body:       `{"error": "Command does not exist"}`,
-				}, nil
-			}
-
-			response, err := cmd.Handler(&interaction)
+			response, err := discord.DeferredMessage()
 			if err != nil {
 				log.Printf("Error! Handler Error: %s", err)
 				return events.LambdaFunctionURLResponse{}, err

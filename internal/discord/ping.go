@@ -1,16 +1,6 @@
 package discord
 
-import (
-	"github.com/bwmarrin/discordgo"
-)
-
-func ping(*discordgo.Interaction) (discordgo.InteractionResponse, error) {
+func ping() (string, error) {
 	// log.Println("ping")
-
-	return discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Content: "Pong!",
-		},
-	}, nil
+	return "Pong!", nil
 }
