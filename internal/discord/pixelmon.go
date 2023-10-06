@@ -9,7 +9,7 @@ import (
 )
 
 func status() (string, error) {
-	// log.Println("/pixelmon status")
+	log.Println("/pixelmon status")
 
 	result, online, err := pixelmon.GetStatus()
 	if err != nil {
@@ -20,9 +20,9 @@ func status() (string, error) {
 	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 	if result {
 		log.Printf("%v is online", serverURL)
-		return fmt.Sprintf(":green_circle:   Number of Online Players: %v", online), nil
+		return fmt.Sprintf(":green_circle:   %s | Number of Online Players: %v", serverURL, online), nil
 	} else {
 		log.Printf("%v is offline", serverURL)
-		return ":red_circle:   Currently Offline", nil
+		return fmt.Sprintf(":red_circle:   %s | Currently Offline", serverURL), nil
 	}
 }

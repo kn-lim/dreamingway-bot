@@ -18,7 +18,7 @@ type MCStatusResponse struct {
 
 // GetMCStatus checks with mcstatus.io to get information about the Minecraft server
 func GetMCStatus() (bool, int, error) {
-	log.Println("GetMCStatus()")
+	// log.Println("GetMCStatus()")
 
 	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 	if serverURL == "" {
@@ -26,7 +26,7 @@ func GetMCStatus() (bool, int, error) {
 	}
 
 	url := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", serverURL)
-	log.Printf("%v", url)
+	// log.Printf("%v", url)
 
 	response, err := http.Get(url)
 	if err != nil {

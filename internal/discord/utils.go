@@ -34,7 +34,7 @@ func SendDeferredMessage(appID string, token string, content string) error {
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	if err != nil {
-		return fmt.Errorf("couldn't create http request: %v", err)
+		return fmt.Errorf("error! couldn't create http request: %v", err)
 	}
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
@@ -42,7 +42,7 @@ func SendDeferredMessage(appID string, token string, content string) error {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		return fmt.Errorf("couldn't send the http request: %v", err)
+		return fmt.Errorf("error! couldn't send the http request: %v", err)
 	}
 	defer response.Body.Close()
 
@@ -53,7 +53,7 @@ func SendDeferredMessage(appID string, token string, content string) error {
 			return err
 		}
 		log.Printf("Error! Discord API Error: %v", result)
-		return fmt.Errorf("discord API error: %v", result)
+		return fmt.Errorf("error! discord API error: %v", result)
 	}
 
 	return nil
