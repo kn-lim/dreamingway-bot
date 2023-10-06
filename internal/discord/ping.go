@@ -1,8 +1,12 @@
 package discord
 
-import "log"
+import (
+	"log"
 
-func ping() (string, error) {
+	"github.com/bwmarrin/discordgo"
+)
+
+func ping(i *discordgo.Interaction) (string, error) {
 	log.Println("/ping")
 
 	return "Pong!", nil

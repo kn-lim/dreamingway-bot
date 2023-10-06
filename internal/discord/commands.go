@@ -6,8 +6,8 @@ import (
 
 type Command struct {
 	Command discordgo.ApplicationCommand
-	Handler func() (string, error)
-	Options map[string]func() (string, error)
+	Handler func(*discordgo.Interaction) (string, error)
+	Options map[string]func(*discordgo.Interaction) (string, error)
 }
 
 var (
@@ -33,7 +33,7 @@ var (
 				},
 			},
 			Handler: nil,
-			Options: map[string]func() (string, error){
+			Options: map[string]func(*discordgo.Interaction) (string, error){
 				"status": status,
 			},
 		},

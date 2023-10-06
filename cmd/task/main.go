@@ -27,14 +27,14 @@ func handler(interaction discordgo.Interaction) error {
 	if cmd.Handler != nil {
 		log.Printf("Running the handler of %s", interaction.ApplicationCommandData().Name)
 
-		message, err = cmd.Handler()
+		message, err = cmd.Handler(&interaction)
 		if err != nil {
 			return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
 		}
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		log.Printf("Running the option handlers of %s", interaction.ApplicationCommandData().Name)
 
-		message, err = cmd.Options[interaction.ApplicationCommandData().Options[0].Name]()
+		message, err = cmd.Options[interaction.ApplicationCommandData().Options[0].Name](&interaction)
 		if err != nil {
 			return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
 		}
