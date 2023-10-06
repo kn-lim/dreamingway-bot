@@ -22,27 +22,25 @@ func handler(interaction discordgo.Interaction) error {
 		return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
 	}
 
+	var message string
+	var err error
 	if cmd.Handler != nil {
 		log.Printf("Running the handler of %s", interaction.ApplicationCommandData().Name)
 
-		message, err := cmd.Handler()
+		message, err = cmd.Handler()
 		if err != nil {
 			return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
 		}
-
-		return discord.SendDeferredMessage(interaction.AppID, interaction.Token, message)
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		log.Printf("Running the option handlers of %s", interaction.ApplicationCommandData().Name)
 
-		message, err := cmd.Options[interaction.ApplicationCommandData().Options[0].Name]()
+		message, err = cmd.Options[interaction.ApplicationCommandData().Options[0].Name]()
 		if err != nil {
 			return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
 		}
-
-		return discord.SendDeferredMessage(interaction.AppID, interaction.Token, message)
 	}
 
-	return discord.SendDeferredMessage(interaction.AppID, interaction.Token, ErrorMessage)
+	return discord.SendDeferredMessage(interaction.AppID, interaction.Token, message)
 }
 
 func main() {
