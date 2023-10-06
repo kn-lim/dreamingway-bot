@@ -5,10 +5,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/bwmarrin/discordgo"
+
 	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
 )
 
-func status() (string, error) {
+func status(i *discordgo.Interaction) (string, error) {
 	log.Println("/pixelmon status")
 
 	result, online, err := pixelmon.GetStatus()
@@ -25,4 +27,15 @@ func status() (string, error) {
 		// log.Printf("%v is offline", serverURL)
 		return fmt.Sprintf(":red_circle:   %s | Currently Offline", serverURL), nil
 	}
+}
+
+func start(i *discordgo.Interaction) (string, error) {
+	log.Println("/pixelmon start")
+
+	if err := SendDeferredMessage(i.AppID, i.Token, "test message 1"); err != nil {
+		log.Println("Error with sending 1st deferred message")
+		return "", err
+	}
+
+	return "test message 2!!!", nil
 }
