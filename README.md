@@ -87,6 +87,6 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 3. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda functions.
 4. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
 5. Give the role the **task** Lambda function is using permission to access the AWS resources it will need.
-6. Get the Lambda endpoint function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+6. Get the **endpoint** Lambda function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
     - If it saves properly, that indicates your Lambda function is properly configured to act as a Discord bot.
 
