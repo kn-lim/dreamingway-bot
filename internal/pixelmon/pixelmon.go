@@ -54,17 +54,17 @@ func StartService(instanceID string, zoneID string, url string) error {
 		return err
 	}
 
-	// Get EC2 instance
-	_, instance, err := getInstance(cfg, instanceID)
-	if err != nil {
-		return err
-	}
-
 	// Wait till EC2 instance is running
+	var instance types.Instance
 	for {
-		log.Printf("Instance State: %s", instance.State.Name)
+		// Get EC2 instance
+		_, i, err := getInstance(cfg, instanceID)
+		if err != nil {
+			return err
+		}
 
-		if instance.State.Name == types.InstanceStateNameRunning {
+		if i.State.Name == types.InstanceStateNameRunning {
+			instance = i
 			break
 		}
 
