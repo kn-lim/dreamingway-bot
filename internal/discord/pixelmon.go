@@ -64,7 +64,7 @@ func start(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	if err := pixelmon.StartService(os.Getenv("PIXELMON_INSTANCE_ID"), os.Getenv("PIXELMON_ZONE_ID"), ServerURL); err != nil {
+	if err := pixelmon.StartService(os.Getenv("PIXELMON_INSTANCE_ID"), os.Getenv("PIXELMON_HOSTED_ZONE_ID"), ServerURL); err != nil {
 		return "", err
 	}
 
@@ -99,7 +99,7 @@ func stop(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	if err := pixelmon.StopService(os.Getenv("PIXELMON_INSTANCE_ID"), os.Getenv("PIXELMON_ZONE_ID"), ServerURL, os.Getenv("PIXELMON_RCON_PASSWORD")); err != nil {
+	if err := pixelmon.StopService(os.Getenv("PIXELMON_INSTANCE_ID"), os.Getenv("PIXELMON_HOSTED_ZONE_ID"), ServerURL, os.Getenv("PIXELMON_RCON_PASSWORD")); err != nil {
 		return "", err
 	}
 
