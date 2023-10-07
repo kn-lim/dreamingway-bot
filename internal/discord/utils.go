@@ -11,7 +11,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const DiscordBaseURL = "https://discord.com/api"
+const (
+	DiscordBaseURL = "https://discord.com/api"
+)
 
 func DeferredMessage() (discordgo.InteractionResponse, error) {
 	return discordgo.InteractionResponse{

@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 )
 
 type MCStatusResponse struct {
@@ -17,18 +16,13 @@ type MCStatusResponse struct {
 }
 
 // GetMCStatus checks with mcstatus.io to get information about the Minecraft server
-func GetMCStatus() (bool, int, error) {
+func GetMCStatus(url string) (bool, int, error) {
 	// log.Println("GetMCStatus()")
 
-	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
-	if serverURL == "" {
-		return false, 0, fmt.Errorf("PIXELMON_DOMAIN/PIXELMON_SUBDOMAIN environment variable not set")
-	}
-
-	url := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", serverURL)
+	mcstatus := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", url)
 	// log.Printf("%v", url)
 
-	response, err := http.Get(url)
+	response, err := http.Get(mcstatus)
 	if err != nil {
 		return false, 0, err
 	}
@@ -45,7 +39,7 @@ func GetMCStatus() (bool, int, error) {
 		return false, 0, err
 	}
 
-	log.Printf("%v | Online: %v, Player Count: %v", serverURL, status.Online, status.Players.Online)
+	log.Printf("%v | Online: %v, Player Count: %v", url, status.Online, status.Players.Online)
 
 	return status.Online, status.Players.Online, nil
 }

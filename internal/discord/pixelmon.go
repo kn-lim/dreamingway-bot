@@ -3,7 +3,6 @@ package discord
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/bwmarrin/discordgo"
 
@@ -19,23 +18,55 @@ func status(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	serverURL := fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 	if result {
 		// log.Printf("%v is online", serverURL)
-		return fmt.Sprintf(":green_circle:   %s | Number of Online Players: %v", serverURL, online), nil
+		return fmt.Sprintf(":green_circle:   %s | Online | Number of Online Players: %v", pixelmon.ServerURL, online), nil
 	} else {
 		// log.Printf("%v is offline", serverURL)
-		return fmt.Sprintf(":red_circle:   %s | Currently Offline", serverURL), nil
+		return fmt.Sprintf(":red_circle:   %s | Offline", pixelmon.ServerURL), nil
 	}
 }
 
 func start(i *discordgo.Interaction) (string, error) {
 	log.Println("/pixelmon start")
 
-	if err := SendDeferredMessage(i.AppID, i.Token, "test message 1"); err != nil {
-		log.Println("Error with sending 1st deferred message")
+	if err := SendDeferredMessage(i.AppID, i.Token, fmt.Sprintf(":green_square:   %s | Starting the Pixelmon server", pixelmon.ServerURL)); err != nil {
 		return "", err
 	}
 
-	return "test message 2!!!", nil
+	if err := pixelmon.StartInstance(); err != nil {
+		return "", err
+	}
+
+	if err := pixelmon.StartService(); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf(":green_circle:   %s | Online", pixelmon.ServerURL), nil
+}
+
+func stop(i *discordgo.Interaction) (string, error) {
+	log.Println("/pixelmon stop")
+
+	if err := SendDeferredMessage(i.AppID, i.Token, fmt.Sprintf(":red_square:   %s | Stopping the Pixelmon server", pixelmon.ServerURL)); err != nil {
+		return "", err
+	}
+
+	if err := pixelmon.StopInstance(); err != nil {
+		return "", err
+	}
+
+	if err := pixelmon.StopService(); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf(":red_circle:   %s | Offline", pixelmon.ServerURL), nil
+}
+
+func say(i *discordgo.Interaction) (string, error) {
+	return "", nil
+}
+
+func whitelist(i *discordgo.Interaction) (string, error) {
+	return "", nil
 }
