@@ -42,8 +42,6 @@ func StartInstance(instanceID string) error {
 		}
 	}
 
-	log.Println("Instance is running")
-
 	return nil
 }
 
@@ -92,6 +90,7 @@ func StartService(instanceID string, zoneID string, url string) error {
 	}
 	_, err = client.SendCommand(context.TODO(), input)
 	if err != nil {
+		log.Printf("Error! Couldn't send command: %v", err)
 		return err
 	}
 
