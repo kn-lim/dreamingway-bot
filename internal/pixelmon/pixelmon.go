@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 
 	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
@@ -29,7 +30,7 @@ func StartInstance(instanceID string) error {
 	}
 
 	// Start EC2 instance
-	if instance.State.Name == "stopped" {
+	if instance.State.Name == types.InstanceStateNameStopped {
 		input := &ec2.StartInstancesInput{
 			InstanceIds: []string{*instance.InstanceId},
 		}
@@ -40,6 +41,8 @@ func StartInstance(instanceID string) error {
 			return err
 		}
 	}
+
+	log.Println("Instance is running")
 
 	return nil
 }
@@ -59,7 +62,9 @@ func StartService(instanceID string, zoneID string, url string) error {
 
 	// Wait till EC2 instance is running
 	for {
-		if instance.State.Name == "running" {
+		log.Printf("Instance State: %s", instance.State.Name)
+
+		if instance.State.Name == types.InstanceStateNameRunning {
 			break
 		}
 
@@ -126,7 +131,7 @@ func StopInstance(instanceID string) error {
 	}
 
 	// Stop EC2 instance
-	if instance.State.Name == "running" {
+	if instance.State.Name == types.InstanceStateNameRunning {
 		input := &ec2.StopInstancesInput{
 			InstanceIds: []string{*instance.InstanceId},
 		}
