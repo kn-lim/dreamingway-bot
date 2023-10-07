@@ -77,6 +77,9 @@ func StartService(instanceID string, zoneID string, url string) error {
 		return err
 	}
 
+	// Delay to ensure command can be sent to EC2 instance
+	time.Sleep(delay * time.Second)
+
 	// Send start command to EC2 instance
 	client := ssm.NewFromConfig(cfg)
 	documentName := "AWS-RunShellScript"
