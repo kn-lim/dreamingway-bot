@@ -122,7 +122,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 				client := lambdaSvc.NewFromConfig(cfg)
 
-				payloadBytes, err := json.Marshal(&interaction)
+				payload, err := json.Marshal(&interaction)
 				if err != nil {
 					log.Printf("Error! Couldn't marshal JSON payload: %s", err)
 					return events.LambdaFunctionURLResponse{}, err
@@ -130,7 +130,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 
 				input := &lambdaSvc.InvokeInput{
 					FunctionName:   aws.String(os.Getenv("TASK_FUNCTION_NAME")),
-					Payload:        payloadBytes,
+					Payload:        payload,
 					InvocationType: types.InvocationTypeEvent,
 				}
 				if _, err := client.Invoke(ctx, input); err != nil {

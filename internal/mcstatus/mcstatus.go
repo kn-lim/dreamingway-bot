@@ -20,7 +20,7 @@ func GetMCStatus(url string) (bool, int, error) {
 	// log.Println("GetMCStatus()")
 
 	mcstatus := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", url)
-	// log.Printf("%v", url)
+	// log.Printf("MCStatus URL: %v", mcstatus)
 
 	response, err := http.Get(mcstatus)
 	if err != nil {

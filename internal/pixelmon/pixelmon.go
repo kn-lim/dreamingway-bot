@@ -208,6 +208,7 @@ func StopService(instanceID string, zoneID string, url string, rcon string) erro
 }
 
 func SayMessage(instanceID string, rcon string, username string, message string) error {
+	// Setup AWS session
 	cfg, err := getConfig()
 	if err != nil {
 		return err
@@ -234,6 +235,7 @@ func SayMessage(instanceID string, rcon string, username string, message string)
 }
 
 func AddToWhitelist(instanceID string, rcon string, username string) error {
+	// Setup AWS session
 	cfg, err := getConfig()
 	if err != nil {
 		return err
