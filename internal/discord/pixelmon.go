@@ -128,7 +128,7 @@ func say(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	return "", nil
+	return fmt.Sprintf("Sent command to say %s", message), nil
 }
 
 func whitelist(i *discordgo.Interaction) (string, error) {
@@ -161,5 +161,5 @@ func whitelist(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	return "", nil
+	return fmt.Sprintf("Sent command to whitelist %s", username), nil
 }
