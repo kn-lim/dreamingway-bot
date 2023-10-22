@@ -2,12 +2,19 @@ package mcstatus_test
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
 )
+
+type errorReader struct{}
+
+func (e *errorReader) Read(p []byte) (n int, err error) {
+	return 0, errors.New("forced read error")
+}
 
 func TestGetMCStatus(t *testing.T) {
 	serverURL := "test-minecraft-server"
@@ -41,11 +48,51 @@ func TestGetMCStatus(t *testing.T) {
 	})
 
 	t.Run("error with http", func(t *testing.T) {
-		invalidURL := "jttp://invalid-url"
+		invalidURL := "http://invalid-url"
 
 		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(invalidURL))
 		if err == nil {
-			t.Fatal("mcstatus.GetMCStatus() err = nil; want non-nil")
+			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
+		}
+	})
+
+	t.Run("error with reading body", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			// Using a hijacker to forcibly close the connection
+			hijacker, ok := w.(http.Hijacker)
+			if !ok {
+				t.Fatal("error! couldn't hijack connection")
+			}
+			conn, _, err := hijacker.Hijack()
+			if err != nil {
+				t.Fatal(err)
+			}
+			conn.Close() // Forcibly close connection to simulate read error
+		}))
+		defer server.Close()
+
+		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(server.URL))
+		if err == nil {
+			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
+		}
+	})
+
+	t.Run("error with json unmarshalling", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			// Sending an invalid JSON response
+			w.Write([]byte("invalid json"))
+		}))
+		defer server.Close()
+
+		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(server.URL))
+		if err == nil {
+			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
 		}
 	})
 }
