@@ -4,9 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
+
+type options struct {
+	baseURL string
+}
+type Option func(*options)
+
+func WithBaseURL(baseURL string) Option {
+	return func(o *options) {
+		o.baseURL = baseURL
+	}
+}
 
 type MCStatusResponse struct {
 	Online  bool `json:"online"`
@@ -16,10 +26,19 @@ type MCStatusResponse struct {
 }
 
 // GetMCStatus checks with mcstatus.io to get information about the Minecraft server
-func GetMCStatus(url string) (bool, int, error) {
+func GetMCStatus(serverURL string, opts ...Option) (bool, int, error) {
 	// log.Println("GetMCStatus()")
 
-	mcstatus := fmt.Sprintf("https://api.mcstatus.io/v2/status/java/%s", url)
+	// Defaults
+	config := &options{
+		baseURL: "https://api.mcstatus.io/v2/status/java",
+	}
+
+	for _, opt := range opts {
+		opt(config)
+	}
+
+	mcstatus := fmt.Sprintf("%s/%s", config.baseURL, serverURL)
 	// log.Printf("MCStatus URL: %v", mcstatus)
 
 	response, err := http.Get(mcstatus)
@@ -39,7 +58,7 @@ func GetMCStatus(url string) (bool, int, error) {
 		return false, 0, err
 	}
 
-	log.Printf("%v | Online: %v, Player Count: %v", url, status.Online, status.Players.Online)
+	// log.Printf("%v | Online: %v, Player Count: %v", url, status.Online, status.Players.Online)
 
 	return status.Online, status.Players.Online, nil
 }
