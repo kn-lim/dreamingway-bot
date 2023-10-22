@@ -1,6 +1,6 @@
 module github.com/kn-lim/dreamingway-bot
 
-go 1.21.1
+go 1.21.3
 
 require (
 	github.com/aws/aws-lambda-go v1.41.0
