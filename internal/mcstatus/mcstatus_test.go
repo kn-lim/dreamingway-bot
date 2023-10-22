@@ -2,19 +2,12 @@ package mcstatus_test
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
 )
-
-type errorReader struct{}
-
-func (e *errorReader) Read(p []byte) (n int, err error) {
-	return 0, errors.New("forced read error")
-}
 
 func TestGetMCStatus(t *testing.T) {
 	serverURL := "test-minecraft-server"
@@ -29,7 +22,10 @@ func TestGetMCStatus(t *testing.T) {
 
 		server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 			rw.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(rw).Encode(response)
+			err := json.NewEncoder(rw).Encode(response)
+			if err != nil {
+				t.Fatalf("error! couldn't encode json")
+			}
 		}))
 		defer server.Close()
 
@@ -86,7 +82,10 @@ func TestGetMCStatus(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 
 			// Sending an invalid JSON response
-			w.Write([]byte("invalid json"))
+			_, err := w.Write([]byte("invalid json"))
+			if err != nil {
+				t.Fatalf("error! couldn't write to http")
+			}
 		}))
 		defer server.Close()
 
