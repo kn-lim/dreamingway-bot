@@ -100,7 +100,7 @@ func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (even
 			}, nil
 		case interaction.Type == 2:
 			// Application Command
-			log.Printf("Recieved Application Command: %s", interaction.ApplicationCommandData().Name)
+			log.Printf("Received Application Command: %s", interaction.ApplicationCommandData().Name)
 
 			response, err := discord.DeferredMessage()
 			if err != nil {
