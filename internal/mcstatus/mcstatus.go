@@ -33,7 +33,6 @@ func GetMCStatus(serverURL string, opts ...Option) (bool, int, error) {
 	config := &options{
 		baseURL: "https://api.mcstatus.io/v2/status/java",
 	}
-
 	for _, opt := range opts {
 		opt(config)
 	}

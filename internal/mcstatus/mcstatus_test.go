@@ -35,7 +35,7 @@ func TestGetMCStatus(t *testing.T) {
 		}
 
 		if !gotOnline {
-			t.Fatalf("mcstatus.GetMCStatus() online = %v; want true", gotOnline)
+			t.Fatalf("mcstatus.GetMCStatus() online = %v; want %v", gotOnline, true)
 		}
 
 		if gotPlayers != 5 {
