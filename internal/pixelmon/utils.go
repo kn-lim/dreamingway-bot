@@ -17,6 +17,17 @@ const (
 	delay = 10 // Seconds
 )
 
+type options struct {
+	url string
+}
+type Option func(*options)
+
+func WithURL(url string) Option {
+	return func(o *options) {
+		o.url = url
+	}
+}
+
 func getConfig() (aws.Config, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("PIXELMON_REGION")))
 	if err != nil {

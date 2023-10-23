@@ -12,8 +12,14 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
 )
 
-func GetStatus(url string) (bool, int, error) {
-	return mcstatus.GetMCStatus(url)
+func GetStatus(url string, opts ...Option) (bool, int, error) {
+	// Defaults
+	config := &options{}
+	for _, opt := range opts {
+		opt(config)
+	}
+
+	return mcstatus.GetMCStatus(url, mcstatus.WithBaseURL(config.url))
 }
 
 func StartInstance(instanceID string) error {

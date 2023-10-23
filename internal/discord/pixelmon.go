@@ -14,25 +14,31 @@ var (
 	ServerURL = fmt.Sprintf("%v.%v", os.Getenv("PIXELMON_SUBDOMAIN"), os.Getenv("PIXELMON_DOMAIN"))
 )
 
-func status(i *discordgo.Interaction) (string, error) {
+func status(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Println("/pixelmon status")
 
-	result, online, err := pixelmon.GetStatus(ServerURL)
+	// Defaults
+	config := &options{}
+	for _, opt := range opts {
+		opt(config)
+	}
+
+	isOnline, playerCount, err := pixelmon.GetStatus(ServerURL, pixelmon.WithURL(config.url))
 	if err != nil {
 		log.Printf("Error! Couldn't get status: %s", err)
 		return "", err
 	}
 
-	if result {
+	if isOnline {
 		// log.Printf("%v is online", serverURL)
-		return fmt.Sprintf(":green_circle:   %s | Online | Number of Online Players: %v", ServerURL, online), nil
+		return fmt.Sprintf(":green_circle:   %s | Online | Number of Online Players: %v", ServerURL, playerCount), nil
 	} else {
 		// log.Printf("%v is offline", serverURL)
 		return fmt.Sprintf(":red_circle:   %s | Offline", ServerURL), nil
 	}
 }
 
-func start(i *discordgo.Interaction) (string, error) {
+func start(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Println("/pixelmon start")
 
 	// Check if user has correct role
@@ -64,7 +70,7 @@ func start(i *discordgo.Interaction) (string, error) {
 	return fmt.Sprintf(":green_circle:   %s | Online", ServerURL), nil
 }
 
-func stop(i *discordgo.Interaction) (string, error) {
+func stop(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Println("/pixelmon stop")
 
 	// Check if user has correct role
@@ -96,7 +102,7 @@ func stop(i *discordgo.Interaction) (string, error) {
 	return fmt.Sprintf(":red_circle:   %s | Offline", ServerURL), nil
 }
 
-func say(i *discordgo.Interaction) (string, error) {
+func say(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Printf("/pixelmon say")
 
 	// Check if service is already stopped
@@ -117,7 +123,7 @@ func say(i *discordgo.Interaction) (string, error) {
 	return fmt.Sprintf("Sent command to say `%s`.", message), nil
 }
 
-func whitelist(i *discordgo.Interaction) (string, error) {
+func whitelist(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Printf("/pixelmon whitelist")
 
 	// Check if user has correct role
