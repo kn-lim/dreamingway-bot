@@ -8,6 +8,10 @@ on:
       - '.gitignore'
       - 'LICENSE'
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
 
 permissions:
   contents: read
