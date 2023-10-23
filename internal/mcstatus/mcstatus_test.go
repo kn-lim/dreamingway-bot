@@ -20,9 +20,9 @@ func TestGetMCStatus(t *testing.T) {
 			}{Online: 5},
 		}
 
-		server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-			rw.Header().Set("Content-Type", "application/json")
-			err := json.NewEncoder(rw).Encode(response)
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			err := json.NewEncoder(w).Encode(response)
 			if err != nil {
 				t.Fatalf("error! couldn't encode json")
 			}
@@ -57,7 +57,7 @@ func TestGetMCStatus(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 
-			// Using a hijacker to forcibly close the connection
+			// Use a hijacker to forcibly close the connection
 			hijacker, ok := w.(http.Hijacker)
 			if !ok {
 				t.Fatal("error! couldn't hijack connection")
@@ -66,7 +66,7 @@ func TestGetMCStatus(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			conn.Close() // Forcibly close connection to simulate read error
+			conn.Close() // Close connection to simulate read error
 		}))
 		defer server.Close()
 
@@ -81,7 +81,7 @@ func TestGetMCStatus(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 
-			// Sending an invalid JSON response
+			// Send an invalid JSON response
 			_, err := w.Write([]byte("invalid json"))
 			if err != nil {
 				t.Fatalf("error! couldn't write to http")

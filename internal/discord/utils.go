@@ -13,7 +13,37 @@ import (
 
 const (
 	DiscordBaseURL = "https://discord.com/api"
+
+	ErrMissingRole = "You don't have the required role to use this command!"
 )
+
+type options struct {
+	client *http.Client
+	url    string
+}
+type Option func(*options)
+
+func WithClient(client *http.Client) Option {
+	return func(o *options) {
+		o.client = client
+	}
+}
+
+func WithURL(url string) Option {
+	return func(o *options) {
+		o.url = url
+	}
+}
+
+func CheckRole(roles []string, requiredRole string) bool {
+	for _, role := range roles {
+		if role == requiredRole {
+			return true
+		}
+	}
+
+	return false
+}
 
 func DeferredMessage() (discordgo.InteractionResponse, error) {
 	return discordgo.InteractionResponse{
@@ -21,8 +51,17 @@ func DeferredMessage() (discordgo.InteractionResponse, error) {
 	}, nil
 }
 
-func SendDeferredMessage(appID string, token string, content string) error {
+func SendDeferredMessage(appID string, token string, content string, opts ...Option) error {
 	log.Printf("Sending message: %s", content)
+
+	// Defaults
+	config := &options{
+		client: &http.Client{},
+		url:    DiscordBaseURL,
+	}
+	for _, opt := range opts {
+		opt(config)
+	}
 
 	payload, err := json.Marshal(map[string]string{
 		"content": content,
@@ -31,7 +70,7 @@ func SendDeferredMessage(appID string, token string, content string) error {
 		return fmt.Errorf("couldn't marshal JSON: %v", err)
 	}
 
-	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", DiscordBaseURL, os.Getenv("DISCORD_API_VERSION"), appID, token)
+	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", config.url, os.Getenv("DISCORD_API_VERSION"), appID, token)
 	// log.Printf("Discord API URL: %s", url)
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
@@ -41,7 +80,7 @@ func SendDeferredMessage(appID string, token string, content string) error {
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
 
-	client := &http.Client{}
+	client := config.client
 	response, err := client.Do(request)
 	if err != nil {
 		return fmt.Errorf("error! couldn't send the http request: %v", err)

@@ -36,15 +36,8 @@ func start(i *discordgo.Interaction) (string, error) {
 	log.Println("/pixelmon start")
 
 	// Check if user has correct role
-	verified := false
-	for _, role := range i.Member.Roles {
-		if role == os.Getenv("PIXELMON_ROLE_ID") {
-			verified = true
-			break
-		}
-	}
-	if !verified {
-		return "You don't have the required role to use this command!", nil
+	if !CheckRole(i.Member.Roles, os.Getenv("PIXELMON_ROLE_ID")) {
+		return ErrMissingRole, nil
 	}
 
 	// Check if service is already running
@@ -75,15 +68,8 @@ func stop(i *discordgo.Interaction) (string, error) {
 	log.Println("/pixelmon stop")
 
 	// Check if user has correct role
-	verified := false
-	for _, role := range i.Member.Roles {
-		if role == os.Getenv("PIXELMON_ROLE_ID") {
-			verified = true
-			break
-		}
-	}
-	if !verified {
-		return "You don't have the required role to use this command!", nil
+	if !CheckRole(i.Member.Roles, os.Getenv("PIXELMON_ROLE_ID")) {
+		return ErrMissingRole, nil
 	}
 
 	// Check if service is already stopped
@@ -135,15 +121,8 @@ func whitelist(i *discordgo.Interaction) (string, error) {
 	log.Printf("/pixelmon whitelist")
 
 	// Check if user has correct role
-	verified := false
-	for _, role := range i.Member.Roles {
-		if role == os.Getenv("PIXELMON_ROLE_ID") {
-			verified = true
-			break
-		}
-	}
-	if !verified {
-		return "You don't have the required role to use this command!", nil
+	if !CheckRole(i.Member.Roles, os.Getenv("PIXELMON_ROLE_ID")) {
+		return ErrMissingRole, nil
 	}
 
 	// Check if service is already stopped
