@@ -7,7 +7,7 @@
 # dreamingway-bot
 
 ![Go](https://img.shields.io/github/go-mod/go-version/kn-lim/dreamingway-bot)
-[![Coverage Status](https://coveralls.io/repos/github/kn-lim/dreamingway-bot/badge.svg?branch=main)](https://coveralls.io/github/kn-lim/dreamingway-bot?branch=main)
+![Coveralls branch](https://img.shields.io/coverallsCoverage/github/kn-lim/dreamingway-bot)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/dreamingway-bot)](https://goreportcard.com/report/github.com/kn-lim/dreamingway-bot)
 ![License](https://img.shields.io/github/license/kn-lim/dreamingway-bot)
 
