@@ -109,22 +109,4 @@ func TestSendDeferredMessage(t *testing.T) {
 			t.Fatalf("discord.SendDeferredMessage() err = nil, want error")
 		}
 	})
-
-	// t.Run("error with http client", func(*testing.T) {
-	// 	// Create a mock RoundTripper to be used as Transport
-	// 	mockTransport := &MockRoundTripper{
-	// 		RoundTripFunc: func(req *http.Request) (*http.Response, error) {
-	// 			return nil, errors.New("error with mock transport")
-	// 		},
-	// 	}
-
-	// 	// Create a http.Client with the mock Transport
-	// 	mockClient := &http.Client{
-	// 		Transport: mockTransport,
-	// 	}
-
-	// 	if err := discord.SendDeferredMessage("appID", "token", TestMessage, discord.WithClient(mockClient)); err == nil {
-	// 		t.Fatalf("discord.SendDeferredMessage() err = nil, want error")
-	// 	}
-	// })
 }
