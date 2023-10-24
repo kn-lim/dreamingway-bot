@@ -7,14 +7,18 @@ import (
 	"net/http"
 )
 
+const (
+	URL = "https://api.mcstatus.io/v2/status/java"
+)
+
 type options struct {
-	baseURL string
+	url string
 }
 type Option func(*options)
 
-func WithBaseURL(baseURL string) Option {
+func WithURL(url string) Option {
 	return func(o *options) {
-		o.baseURL = baseURL
+		o.url = url
 	}
 }
 
@@ -31,13 +35,13 @@ func GetMCStatus(serverURL string, opts ...Option) (bool, int, error) {
 
 	// Defaults
 	config := &options{
-		baseURL: "https://api.mcstatus.io/v2/status/java",
+		url: URL,
 	}
 	for _, opt := range opts {
 		opt(config)
 	}
 
-	mcstatus := fmt.Sprintf("%s/%s", config.baseURL, serverURL)
+	mcstatus := fmt.Sprintf("%s/%s", config.url, serverURL)
 	// log.Printf("MCStatus URL: %v", mcstatus)
 
 	response, err := http.Get(mcstatus)

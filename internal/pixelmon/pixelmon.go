@@ -14,12 +14,14 @@ import (
 
 func GetStatus(url string, opts ...Option) (bool, int, error) {
 	// Defaults
-	config := &options{}
+	config := &options{
+		url: mcstatus.URL,
+	}
 	for _, opt := range opts {
 		opt(config)
 	}
 
-	return mcstatus.GetMCStatus(url, mcstatus.WithBaseURL(config.url))
+	return mcstatus.GetMCStatus(url, mcstatus.WithURL(config.url))
 }
 
 func StartInstance(instanceID string) error {

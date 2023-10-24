@@ -7,6 +7,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
+	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
 	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
 )
 
@@ -18,7 +19,9 @@ func status(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Println("/pixelmon status")
 
 	// Defaults
-	config := &options{}
+	config := &options{
+		url: mcstatus.URL,
+	}
 	for _, opt := range opts {
 		opt(config)
 	}

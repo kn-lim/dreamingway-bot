@@ -29,7 +29,7 @@ func TestGetMCStatus(t *testing.T) {
 		}))
 		defer server.Close()
 
-		gotOnline, gotPlayers, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(server.URL))
+		gotOnline, gotPlayers, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithURL(server.URL))
 		if err != nil {
 			t.Fatalf("mcstatus.GetMCStatus() err = %v; want nil", err)
 		}
@@ -46,7 +46,7 @@ func TestGetMCStatus(t *testing.T) {
 	t.Run("error with http", func(t *testing.T) {
 		invalidURL := "http://invalid-url"
 
-		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(invalidURL))
+		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithURL(invalidURL))
 		if err == nil {
 			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
 		}
@@ -70,7 +70,7 @@ func TestGetMCStatus(t *testing.T) {
 		}))
 		defer server.Close()
 
-		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(server.URL))
+		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithURL(server.URL))
 		if err == nil {
 			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
 		}
@@ -89,7 +89,7 @@ func TestGetMCStatus(t *testing.T) {
 		}))
 		defer server.Close()
 
-		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithBaseURL(server.URL))
+		_, _, err := mcstatus.GetMCStatus(serverURL, mcstatus.WithURL(server.URL))
 		if err == nil {
 			t.Fatalf("mcstatus.GetMCStatus() err = nil; want non-nil")
 		}
