@@ -77,5 +77,39 @@ var (
 				"whitelist": whitelist,
 			},
 		},
+		"partyfinder": {
+			Command: discordgo.ApplicationCommand{
+				Name:        "partyfinder",
+				Description: "Party Finder command",
+				Options: []*discordgo.ApplicationCommandOption{
+					{
+						Type:        discordgo.ApplicationCommandOptionInteger,
+						Name:        "groupsize",
+						Description: "Group Size",
+						Required:    false,
+					},
+					{
+						Type:        discordgo.ApplicationCommandOptionString,
+						Name:        "partycomp",
+						Description: "Party Composition",
+						Required:    false,
+					},
+					{
+						Type:        discordgo.ApplicationCommandOptionString,
+						Name:        "date",
+						Description: "Event's start date",
+						Required:    false,
+					},
+					{
+						Type:        discordgo.ApplicationCommandOptionString,
+						Name:        "description",
+						Description: "Description of the event",
+						Required:    true,
+					},
+				},
+			},
+			Handler: partyfinder,
+			Options: nil,
+		},
 	}
 )
