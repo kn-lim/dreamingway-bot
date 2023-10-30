@@ -23,12 +23,12 @@ type message struct {
 }
 
 type components struct {
-	Type       int                   `json:"type"`
-	Components *discordgo.ActionsRow `json:"components"`
+	Type       int                          `json:"type"`
+	Components []discordgo.MessageComponent `json:"components"`
 }
 
 type options struct {
-	actionsRow *discordgo.ActionsRow
+	components []discordgo.MessageComponent
 
 	// For tests
 	client *http.Client
@@ -36,9 +36,9 @@ type options struct {
 }
 type Option func(*options)
 
-func WithActionsRow(actionsRow *discordgo.ActionsRow) Option {
+func WithActionsRow(components []discordgo.MessageComponent) Option {
 	return func(o *options) {
-		o.actionsRow = actionsRow
+		o.components = components
 	}
 }
 
@@ -75,6 +75,8 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 
 	// Defaults
 	config := &options{
+		components: nil,
+
 		// For tests
 		client: &http.Client{},
 		url:    DiscordBaseURL,
@@ -87,11 +89,13 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 		Content:    content,
 		Components: components{},
 	}
-	if config.actionsRow != nil {
+	if config.components != nil {
 		message.Components = components{
 			Type:       int(discordgo.ActionsRowComponent),
-			Components: config.actionsRow,
+			Components: config.components,
 		}
+
+		log.Printf("Message: %v", message)
 	}
 
 	payload, err := json.Marshal(message)
