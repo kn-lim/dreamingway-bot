@@ -23,12 +23,19 @@ type message struct {
 }
 
 type components struct {
-	Type       int                          `json:"type"`
-	Components []discordgo.MessageComponent `json:"components"`
+	Type       int      `json:"type"`
+	Components []button `json:"components"`
+}
+
+type button struct {
+	Type     int    `json:"type"`
+	Label    string `json:"label"`
+	Style    int    `json:"style"`
+	CustomID string `json:"custom_id"`
 }
 
 type options struct {
-	components []discordgo.MessageComponent
+	actionsRow *discordgo.ActionsRow
 
 	// For tests
 	client *http.Client
@@ -36,9 +43,9 @@ type options struct {
 }
 type Option func(*options)
 
-func WithActionsRow(components []discordgo.MessageComponent) Option {
+func WithActionsRow(actionsRow *discordgo.ActionsRow) Option {
 	return func(o *options) {
-		o.components = components
+		o.actionsRow = actionsRow
 	}
 }
 
@@ -75,8 +82,56 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 
 	// Defaults
 	config := &options{
-		components: nil,
+		// For tests
+		client: &http.Client{},
+		url:    DiscordBaseURL,
+	}
+	for _, opt := range opts {
+		opt(config)
+	}
 
+	payload, err := json.Marshal(map[string]string{
+		"content": content,
+	})
+	if err != nil {
+		return fmt.Errorf("couldn't marshal JSON: %v", err)
+	}
+
+	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", config.url, os.Getenv("DISCORD_API_VERSION"), appID, token)
+	// log.Printf("Discord API URL: %s", url)
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	if err != nil {
+		return fmt.Errorf("error! couldn't create http request: %v", err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Authorization", "Bot "+os.Getenv("DISCORD_BOT_TOKEN"))
+
+	client := config.client
+	response, err := client.Do(request)
+	if err != nil {
+		return fmt.Errorf("error! couldn't send the http request: %v", err)
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		var result map[string]interface{}
+		if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+			log.Printf("Error! Couldn't decode result: %v", err)
+			return err
+		}
+		log.Printf("Error! Discord API Error: %v", result)
+		return fmt.Errorf("error! discord API error: %v", result)
+	}
+
+	return nil
+}
+
+func SendDeferredMessageWithComponents(appID string, token string, content string, opts ...Option) error {
+	log.Printf("Sending message: %s", content)
+
+	// Defaults
+	config := &options{
 		// For tests
 		client: &http.Client{},
 		url:    DiscordBaseURL,
@@ -89,10 +144,20 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 		Content:    content,
 		Components: components{},
 	}
-	if config.components != nil {
+	if config.actionsRow != nil {
+		var buttons []button
+		for _, i := range config.actionsRow.Components {
+			buttons = append(buttons, button{
+				Type:     int(i.Type()),
+				Label:    i.(discordgo.Button).Label,
+				Style:    int(i.(discordgo.Button).Style),
+				CustomID: i.(discordgo.Button).CustomID,
+			})
+		}
+
 		message.Components = components{
 			Type:       int(discordgo.ActionsRowComponent),
-			Components: config.components,
+			Components: buttons,
 		}
 
 		log.Printf("Message: %v", message)

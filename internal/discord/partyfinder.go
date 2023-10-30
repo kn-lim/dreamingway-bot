@@ -36,7 +36,7 @@ func partyfinder(i *discordgo.Interaction, opts ...Option) (string, error) {
 		},
 	}
 
-	if err := SendDeferredMessage(i.AppID, i.Token, "/partyfinder", WithActionsRow(actionsRow.Components)); err != nil {
+	if err := SendDeferredMessageWithComponents(i.AppID, i.Token, "/partyfinder", WithActionsRow(actionsRow)); err != nil {
 		return "", err
 	}
 
