@@ -169,8 +169,8 @@ func SendDeferredMessageWithComponents(appID string, token string, content strin
 	temp, _ := json.Marshal(map[string]string{
 		"content": "test",
 	})
-	log.Printf("Correct Payload: %+v", string(temp))
-	log.Printf("Payload: %+v", string(payload))
+	log.Printf("Correct Payload: %s", string(temp))
+	log.Printf("Payload: %s", string(payload))
 
 	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", config.url, os.Getenv("DISCORD_API_VERSION"), appID, token)
 	// log.Printf("Discord API URL: %s", url)
