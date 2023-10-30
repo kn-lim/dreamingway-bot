@@ -159,14 +159,19 @@ func SendDeferredMessageWithComponents(appID string, token string, content strin
 			Type:       int(discordgo.ActionsRowComponent),
 			Components: buttons,
 		}
-
-		log.Printf("Message: %v", message)
 	}
 
 	payload, err := json.Marshal(message)
 	if err != nil {
 		return fmt.Errorf("couldn't marshal JSON: %v", err)
 	}
+
+	log.Printf("Payload: %v", payload)
+
+	temp, _ := json.Marshal(map[string]string{
+		"content": "test",
+	})
+	log.Printf("Correct Payload: %v", temp)
 
 	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", config.url, os.Getenv("DISCORD_API_VERSION"), appID, token)
 	// log.Printf("Discord API URL: %s", url)
