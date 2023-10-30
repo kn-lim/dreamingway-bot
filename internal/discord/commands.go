@@ -83,8 +83,14 @@ var (
 				Description: "Party Finder command",
 				Options: []*discordgo.ApplicationCommandOption{
 					{
+						Type:        discordgo.ApplicationCommandOptionString,
+						Name:        "description",
+						Description: "Description of the event",
+						Required:    true,
+					},
+					{
 						Type:        discordgo.ApplicationCommandOptionInteger,
-						Name:        "groupsize",
+						Name:        "size",
 						Description: "Group Size",
 						Required:    false,
 					},
@@ -99,12 +105,6 @@ var (
 						Name:        "date",
 						Description: "Event's start date",
 						Required:    false,
-					},
-					{
-						Type:        discordgo.ApplicationCommandOptionString,
-						Name:        "description",
-						Description: "Description of the event",
-						Required:    true,
 					},
 				},
 			},

@@ -17,11 +17,30 @@ const (
 	ErrMissingRole = "You don't have the required role to use this command!"
 )
 
+type message struct {
+	Content    string     `json:"content"`
+	Components components `json:"components"`
+}
+
+type components struct {
+	Type       int                   `json:"type"`
+	Components *discordgo.ActionsRow `json:"components"`
+}
+
 type options struct {
+	actionsRow *discordgo.ActionsRow
+
+	// For tests
 	client *http.Client
 	url    string
 }
 type Option func(*options)
+
+func WithActionsRow(actionsRow *discordgo.ActionsRow) Option {
+	return func(o *options) {
+		o.actionsRow = actionsRow
+	}
+}
 
 func WithClient(client *http.Client) Option {
 	return func(o *options) {
@@ -56,6 +75,7 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 
 	// Defaults
 	config := &options{
+		// For tests
 		client: &http.Client{},
 		url:    DiscordBaseURL,
 	}
@@ -63,9 +83,18 @@ func SendDeferredMessage(appID string, token string, content string, opts ...Opt
 		opt(config)
 	}
 
-	payload, err := json.Marshal(map[string]string{
-		"content": content,
-	})
+	message := message{
+		Content:    content,
+		Components: components{},
+	}
+	if config.actionsRow != nil {
+		message.Components = components{
+			Type:       int(discordgo.ActionsRowComponent),
+			Components: config.actionsRow,
+		}
+	}
+
+	payload, err := json.Marshal(message)
 	if err != nil {
 		return fmt.Errorf("couldn't marshal JSON: %v", err)
 	}

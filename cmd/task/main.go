@@ -40,6 +40,10 @@ func handler(interaction discordgo.Interaction) error {
 		}
 	}
 
+	if message == "" {
+		return nil
+	}
+
 	return discord.SendDeferredMessage(interaction.AppID, interaction.Token, message)
 }
 

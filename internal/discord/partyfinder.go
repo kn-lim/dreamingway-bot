@@ -1,7 +1,6 @@
 package discord
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -10,5 +9,36 @@ import (
 func partyfinder(i *discordgo.Interaction, opts ...Option) (string, error) {
 	log.Println("/partyfinder")
 
-	return fmt.Sprintf("/partyfinder %v %v %v %v", i.ApplicationCommandData().Options[0].Value, i.ApplicationCommandData().Options[1].Value, i.ApplicationCommandData().Options[2].Value, i.ApplicationCommandData().Options[3].Value), nil
+	// Create actions row
+	actionsRow := &discordgo.ActionsRow{
+		Components: []discordgo.MessageComponent{
+			// Create buttons
+			discordgo.Button{
+				Label:    "Tank",
+				Style:    discordgo.PrimaryButton,
+				CustomID: "tank",
+			},
+			discordgo.Button{
+				Label:    "Healer",
+				Style:    discordgo.SuccessButton,
+				CustomID: "healer",
+			},
+			discordgo.Button{
+				Label:    "DPS",
+				Style:    discordgo.DangerButton,
+				CustomID: "dps",
+			},
+			discordgo.Button{
+				Label:    "🗑️",
+				Style:    discordgo.SecondaryButton,
+				CustomID: "delete",
+			},
+		},
+	}
+
+	if err := SendDeferredMessage(i.AppID, i.Token, "/partyfinder", WithActionsRow(actionsRow)); err != nil {
+		return "", err
+	}
+
+	return "", nil
 }
