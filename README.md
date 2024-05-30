@@ -20,6 +20,7 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
 - [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2)
 - [discordgo](https://github.com/bwmarrin/discordgo/)
+- [zap](https://github.com/uber-go/zap)
 
 # Using the Discord Bot
 
