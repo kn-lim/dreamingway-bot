@@ -12,6 +12,14 @@ type Command struct {
 
 var (
 	Commands = map[string]Command{
+		"coinflip": {
+			Command: discordgo.ApplicationCommand{
+				Name:        "Coinflip",
+				Description: "Flip a coin",
+			},
+			Handler: coinflip,
+			Options: nil,
+		},
 		"ping": {
 			Command: discordgo.ApplicationCommand{
 				Name:        "ping",
@@ -77,38 +85,20 @@ var (
 				"whitelist": whitelist,
 			},
 		},
-		"partyfinder": {
+		"roll": {
 			Command: discordgo.ApplicationCommand{
-				Name:        "partyfinder",
-				Description: "Party Finder command",
+				Name:        "roll",
+				Description: "Roll the dice",
 				Options: []*discordgo.ApplicationCommandOption{
 					{
 						Type:        discordgo.ApplicationCommandOptionString,
-						Name:        "description",
-						Description: "Description of the event",
+						Name:        "dice",
+						Description: "Amount of dice to roll plus modifiers",
 						Required:    true,
-					},
-					{
-						Type:        discordgo.ApplicationCommandOptionInteger,
-						Name:        "size",
-						Description: "Group Size",
-						Required:    false,
-					},
-					{
-						Type:        discordgo.ApplicationCommandOptionString,
-						Name:        "partycomp",
-						Description: "Party Composition",
-						Required:    false,
-					},
-					{
-						Type:        discordgo.ApplicationCommandOptionString,
-						Name:        "date",
-						Description: "Event's start date",
-						Required:    false,
 					},
 				},
 			},
-			Handler: partyfinder,
+			Handler: roll,
 			Options: nil,
 		},
 	}
