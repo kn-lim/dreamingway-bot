@@ -11,6 +11,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.40.8
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.50.4
 	github.com/bwmarrin/discordgo v0.28.1
+	go.uber.org/zap v1.27.0
 )
 
 require (
@@ -28,6 +29,7 @@ require (
 	github.com/aws/smithy-go v1.20.2 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
