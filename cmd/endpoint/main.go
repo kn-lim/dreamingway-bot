@@ -20,9 +20,13 @@ import (
 	"github.com/bwmarrin/discordgo"
 
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
+	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
 func handler(ctx context.Context, request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
+	// Initialize logger
+	utils.InitializeLogger()
+
 	public_key_bytes, err := hex.DecodeString(os.Getenv("DISCORD_BOT_PUBLIC_KEY"))
 	if err != nil {
 		return events.LambdaFunctionURLResponse{}, errors.New("error! couldn't decode public key")

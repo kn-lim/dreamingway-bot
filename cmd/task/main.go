@@ -7,6 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
+	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
 const (
@@ -14,6 +15,9 @@ const (
 )
 
 func handler(interaction discordgo.Interaction) error {
+	// Initialize logger
+	utils.InitializeLogger()
+
 	// log.Printf("Received interaction: %+v\n", interaction)
 
 	cmd, ok := discord.Commands[interaction.ApplicationCommandData().Name]

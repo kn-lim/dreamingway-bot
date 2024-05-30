@@ -6,7 +6,9 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+
 	"github.com/kn-lim/dreamingway-bot/internal/discord"
+	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
 var (
@@ -20,6 +22,9 @@ var (
 func init() { flag.Parse() }
 
 func init() {
+	// Initialize logger
+	utils.InitializeLogger()
+
 	var err error
 	s, err = discordgo.New("Bot " + *Token)
 	if err != nil {
