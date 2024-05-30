@@ -75,7 +75,9 @@ func Roll(input string) (string, int, error) {
 	if modifiers != "" {
 		// Split the modifiers into individual terms with spaces
 		modifierTerms := regexp.MustCompile(modifierRegex).FindAllString(modifiers, -1)
-		rollOutput += "(" + strings.Join(modifierTerms, ")")
+		for _, modifierTerm := range modifierTerms {
+			rollOutput = " + (" + modifierTerm + ")"
+		}
 	}
 
 	return rollOutput, result, nil
