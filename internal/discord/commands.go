@@ -14,7 +14,7 @@ var (
 	Commands = map[string]Command{
 		"coinflip": {
 			Command: discordgo.ApplicationCommand{
-				Name:        "Coinflip",
+				Name:        "coinflip",
 				Description: "Flip a coin",
 			},
 			Handler: coinflip,
