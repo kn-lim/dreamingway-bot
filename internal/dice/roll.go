@@ -69,13 +69,13 @@ func Roll(input string) (string, int, error) {
 	// Construct the output string showing individual rolls and modifiers
 	var rollStrings []string
 	for _, roll := range rolls {
-		rollStrings = append(rollStrings, strconv.Itoa(roll))
+		rollStrings = append(rollStrings, "("+strconv.Itoa(roll)+")")
 	}
 	rollOutput := strings.Join(rollStrings, " + ")
 	if modifiers != "" {
 		// Split the modifiers into individual terms with spaces
 		modifierTerms := regexp.MustCompile(modifierRegex).FindAllString(modifiers, -1)
-		rollOutput += " " + strings.Join(modifierTerms, " ")
+		rollOutput += "(" + strings.Join(modifierTerms, ")")
 	}
 
 	return rollOutput, result, nil
