@@ -3,7 +3,6 @@ package dice
 import (
 	"errors"
 	"fmt"
-	"log"
 	"math/rand"
 	"regexp"
 	"strconv"
@@ -24,14 +23,10 @@ func Roll(input string) (string, int, error) {
 	// Define a regular expression to match the dice roll pattern
 	matches := regexp.MustCompile(diceRollRegex).FindStringSubmatch(input)
 
-	log.Printf("matches: %v", matches)
-
 	// Check if input format is correct
 	if matches == nil || len(matches) < 1 {
 		return "", 0, errors.New("invalid input format")
 	}
-
-	log.Println("input correct")
 
 	// Parse the number of rolls (default to 1 if not present)
 	numRolls := 1
@@ -43,15 +38,11 @@ func Roll(input string) (string, int, error) {
 		}
 	}
 
-	log.Printf("rolls: %d", numRolls)
-
 	// Parse the number of sides on the dice
 	sides, err := strconv.Atoi(matches[2])
 	if err != nil {
 		return "", 0, fmt.Errorf("invalid number of sides: %v", err)
 	}
-
-	log.Printf("sides: %d", sides)
 
 	// Parse the modifiers and evaluate it
 	modifiers := matches[3]
@@ -59,8 +50,6 @@ func Roll(input string) (string, int, error) {
 	if err != nil {
 		return "", 0, fmt.Errorf("invalid modifier: %v", err)
 	}
-
-	log.Printf("modifier: %d", modifier)
 
 	// Create a new rand.Rand instance with a seed
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -76,8 +65,6 @@ func Roll(input string) (string, int, error) {
 
 	// Add the modifier to the total roll
 	result := totalRoll + modifier
-
-	log.Printf("result: %d", result)
 
 	// Construct the output string showing individual rolls and modifiers
 	var rollStrings []string
