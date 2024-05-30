@@ -19,5 +19,5 @@ func roll(i *discordgo.Interaction, opts ...Option) (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("%s = %d", output, value), nil
+	return fmt.Sprintf("%s = **%d**", output, value), nil
 }

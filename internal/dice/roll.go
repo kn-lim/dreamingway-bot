@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	diceRollRegex = `^(\d*)d(\d+)([+-]\d+)*$`
+	diceRollRegex = `^(\d*)d(\d+)(([+-]\d+)+)?$`
 	modifierRegex = `[+-]?\d+`
 )
 
