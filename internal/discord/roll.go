@@ -14,6 +14,9 @@ func roll(i *discordgo.Interaction, opts ...Option) (string, error) {
 
 	// Get the dice value
 	diceString := i.ApplicationCommandData().Options[0].StringValue()
+
+	log.Printf("msg: %s", diceString)
+
 	output, value, err := dice.Roll(diceString)
 	if err != nil {
 		return "", err
