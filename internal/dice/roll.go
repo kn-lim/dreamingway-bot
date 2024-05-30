@@ -73,13 +73,15 @@ func Roll(input string) (string, int, error) {
 	}
 	rollOutput := strings.Join(rollStrings, " + ")
 	if modifiers != "" {
-		rollOutput += modifiers
+		// Split the modifiers into individual terms with spaces
+		modifierTerms := regexp.MustCompile(modifierRegex).FindAllString(modifiers, -1)
+		rollOutput += " " + strings.Join(modifierTerms, " ")
 	}
 
 	return rollOutput, result, nil
 }
 
-// evaluateModifier evaluates the arithmetic expression in the modifiers
+// evaluateModifiers evaluates the arithmetic expression in the modifiers
 func evaluateModifiers(modifiers string) (int, error) {
 	if modifiers == "" {
 		return 0, nil
