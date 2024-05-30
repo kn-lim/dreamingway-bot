@@ -27,7 +27,7 @@ func Roll(input string) (string, int, error) {
 	log.Printf("matches: %v", matches)
 
 	// Check if input format is correct
-	if matches == nil || len(matches) > 3 {
+	if matches == nil || len(matches) < 1 {
 		return "", 0, errors.New("invalid input format")
 	}
 
