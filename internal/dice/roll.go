@@ -24,6 +24,8 @@ func Roll(input string) (string, int, error) {
 	// Define a regular expression to match the dice roll pattern
 	matches := regexp.MustCompile(diceRollRegex).FindStringSubmatch(input)
 
+	log.Printf("matches: %v", matches)
+
 	// Check if input format is correct
 	if matches == nil || len(matches) > 3 {
 		return "", 0, errors.New("invalid input format")
