@@ -83,7 +83,7 @@ https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
 ## AWS Setup
 
 1. Create an **endpoint** Lambda function on AWS. 
-    - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
+    - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `x86_64`.
     - Under `Advanced Settings`, select:
         - `Enable function URL`
