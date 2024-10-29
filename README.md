@@ -34,7 +34,7 @@ From the project home directory:
 
 | Name | Description |
 | - | - |
-| `AWS_REGION` | AWS Region of the Task Lambda Function |
+| `AWS_REGION` | AWS Region of the Lambda Functions |
 
 ## Syncing Commands with Discord
 
