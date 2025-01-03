@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/bwmarrin/discordgo"
 	"github.com/goccy/go-yaml"
 
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
@@ -14,8 +13,6 @@ import (
 )
 
 var (
-	s *discordgo.Session
-
 	ConfigPath = flag.String("config", "config.yaml", "Path to the config file")
 )
 
