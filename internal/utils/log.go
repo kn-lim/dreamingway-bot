@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"log"
+
 	"go.uber.org/zap"
 )
 
@@ -12,7 +14,11 @@ func NewLogger() (*zap.SugaredLogger, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer logger.Sync()
+	defer func() {
+		if err := Logger.Sync(); err != nil {
+			log.Printf("error syncing logger: %v", err)
+		}
+	}()
 
 	return logger.Sugar(), nil
 }
