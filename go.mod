@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.56.2
 	github.com/bwmarrin/discordgo v0.28.1
 	github.com/goccy/go-yaml v1.15.13
-	github.com/kn-lim/chattingway v1.1.1
+	github.com/kn-lim/chattingway v1.3.0
 	go.uber.org/zap v1.27.0
 )
 
