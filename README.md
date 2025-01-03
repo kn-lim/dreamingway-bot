@@ -25,80 +25,68 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 ## How to Build
 
-From the project home directory: 
+From the project home directory:
 
 - **Endpoint Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
 - **Task Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
 
-### Build Environment Variables
-
-| Name | Description |
-| - | - |
-| `AWS_REGION` | AWS Region of the Lambda Functions |
+Zip the bootstrap binaries and upload it to the Lambda functions.
 
 ## Syncing Commands with Discord
 
-https://github.com/kn-lim/dreamingway-bot/tree/main/cmd/cli
+1. Rename `config.example.yaml` to `config.yaml` and add in the values.
+2. From the project directory, run the following command:
+
+`go run . -config=config.yaml`
 
 ## Environment Variables
 
 ### Endpoint Lambda Function
 
-#### AWS
-
 | Name | Description |
 | - | - |
+| `DEBUG` | Enable debug mode |
 | `TASK_FUNCTION_NAME` | Name of the Task Lambda Function |
-
-#### Discord
-
-| Name | Description |
-| - | - |
 | `DISCORD_BOT_APPLICATION_ID` | Discord Bot Application ID |
 | `DISCORD_BOT_PUBLIC_KEY` | Discord Bot Public Key |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 
 ### Task Lambda Function
 
-#### Discord
-
 | Name | Description |
 | - | - |
 | `DISCORD_API_VERSION` | Discord API Version |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 
-#### Pixelmon
-
-| Name | Description |
-| - | - |
-| `PIXELMON_NAME` | AWS Name Tag of Pixelmon EC2 Instance |
-| `PIXELMON_INSTANCE_ID` | AWS Instance ID of Pixelmon EC2 Instance |
-| `PIXELMON_REGION` | AWS Region of Pixelmon EC2 Instance |
-| `PIXELMON_HOSTED_ZONE_ID` | AWS Hosted Zone ID of Domain |
-| `PIXELMON_DOMAIN` | Domain of Pixelmon Server |
-| `PIXELMON_SUBDOMAIN` | Subdomain of Pixelmon Server |
-| `PIXELMON_RCON_PASSWORD` | RCON Password of Pixelmon Service |
-| `PIXELMON_ROLE_ID` | Role ID to allow `/pixelmon` command |
-
 ## AWS Setup
 
-1. Create an **endpoint** Lambda function on AWS. 
+To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https://github.com/kn-lim/chattingway-terraform/).
+
+1. Create the **endpoint** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `x86_64`.
-    - Under `Advanced Settings`, select:
-        - `Enable function URL`
-          - Auth type: `NONE`
-          - Invoke mode: `BUFFERED (default)`
-          - Enable `Configure cross-origin resource sharing (CORS)`
-2. Create a **task** Lambda function on AWS. 
-    - For the `Runtime`, select `Provide your own bootstrap on Amazon Linux 2` under `Custom runtime`.
+2. Add an API Gateway triger to the **endpoint** Lambda function.
+    - Use the following settings:
+      - **Intent**: Create a new API
+      - **API type**: REST API
+      - **Security**: Open
+3. Create the **task** Lambda function on AWS.
+    - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `x86_64`.
-3. Archive the `bootstrap` binary in a .zip file and upload it to the Lambda functions.
-4. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
-5. Give the role the **endpoint** Lambda function is using permission to run the **task** Lambda function.
-6. Give the role the **task** Lambda function is using permission to access the AWS resources it will need.
+4. Build the **endpoint** and **task** binaries.
+5. Archive the `bootstrap` binaries in .zip files and upload it to the Lambda functions.
+6. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
 7. Change the `Timeout` of the **task** Lambda function to a value greater than 3 seconds.
     - The `Timeout` of the **endpoint** Lambda function can stay as 3 seconds to follow Discord's requirements.
-8. Get the **endpoint** Lambda function's `Function URL` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
-    - If it saves properly, that indicates your Lambda function is properly configured to act as a Discord bot.
 
+## Discord Setup
+
+### Interactions Endpoint URL
+
+Get the **endpoint** Lambda API Gateway triggers' `API endpoint` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+
+### OAuth2 Scopes
+
+In the OAuth2 URL Generator, give the following scopes when adding the bot to a server:
+
+- `applications.commands`

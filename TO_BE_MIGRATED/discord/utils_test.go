@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kn-lim/dreamingway-bot/internal/discord"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/discord"
 )
 
 const (

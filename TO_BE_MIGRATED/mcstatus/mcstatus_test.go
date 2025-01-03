@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/mcstatus"
 )
 
 func TestGetMCStatus(t *testing.T) {
