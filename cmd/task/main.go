@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 	"log"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -27,8 +27,7 @@ func handler(interaction discordgo.Interaction) error {
 		utils.Logger.Errorw("command does not exist",
 			"command", interaction.ApplicationCommandData().Name,
 		)
-		errorMsg := "Error! Command does not exist."
-		return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, errorMsg)
+		return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Command does not exist.")
 	}
 
 	// Run command handler
@@ -44,7 +43,7 @@ func handler(interaction discordgo.Interaction) error {
 				"command", interaction.ApplicationCommandData().Name,
 				"error", err,
 			)
-			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Something went wrong.")
+			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed.", interaction.ApplicationCommandData().Name))
 		}
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		utils.Logger.Infow("running option handler",
@@ -57,7 +56,7 @@ func handler(interaction discordgo.Interaction) error {
 				"command", interaction.ApplicationCommandData().Name,
 				"error", err,
 			)
-			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Something went wrong.")
+			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed.", interaction.ApplicationCommandData().Name))
 		}
 	}
 
@@ -65,7 +64,7 @@ func handler(interaction discordgo.Interaction) error {
 		utils.Logger.Errorw("got empty message",
 			"command", interaction.ApplicationCommandData().Name,
 		)
-		return errors.New("empty message")
+		return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! Got empty message for /%s.", interaction.ApplicationCommandData().Name))
 	}
 
 	return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, msg)

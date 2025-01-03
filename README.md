@@ -25,6 +25,14 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 # Using the Discord Bot
 
+## Discord Slash Commands
+
+| Command | Description |
+| - | - |
+| `/coinflip` | Flips a coin |
+| `/ping` | Ping |
+| `/roll` | Rolls a dice with modifiers |
+
 ## How to Build
 
 From the project home directory:
