@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/bwmarrin/discordgo"
@@ -21,13 +22,16 @@ func handler(interaction discordgo.Interaction) error {
 		return err
 	}
 
+	// Create a new Discord session
+	dreamingwayBot, err := dreamingway.NewDreamingway(os.Getenv("DISCORD_BOT_TOKEN"))
+
 	// Get command
 	cmd, ok := commands.Commands[interaction.ApplicationCommandData().Name]
 	if !ok {
 		utils.Logger.Errorw("command does not exist",
 			"command", interaction.ApplicationCommandData().Name,
 		)
-		return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Command does not exist.")
+		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Command does not exist.")
 	}
 
 	// Run command handler
@@ -43,7 +47,7 @@ func handler(interaction discordgo.Interaction) error {
 				"command", interaction.ApplicationCommandData().Name,
 				"error", err,
 			)
-			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed.", interaction.ApplicationCommandData().Name))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed.", interaction.ApplicationCommandData().Name))
 		}
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		utils.Logger.Infow("running option handler",
@@ -56,7 +60,7 @@ func handler(interaction discordgo.Interaction) error {
 				"command", interaction.ApplicationCommandData().Name,
 				"error", err,
 			)
-			return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed.", interaction.ApplicationCommandData().Name))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed.", interaction.ApplicationCommandData().Name))
 		}
 	}
 
@@ -64,10 +68,10 @@ func handler(interaction discordgo.Interaction) error {
 		utils.Logger.Errorw("got empty message",
 			"command", interaction.ApplicationCommandData().Name,
 		)
-		return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! Got empty message for /%s.", interaction.ApplicationCommandData().Name))
+		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! Got empty message for /%s.", interaction.ApplicationCommandData().Name))
 	}
 
-	return dreamingway.SendDeferredMessage(interaction.AppID, interaction.Token, msg)
+	return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, msg)
 }
 
 func main() {

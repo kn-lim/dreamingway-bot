@@ -8,6 +8,7 @@ import (
 	"github.com/kn-lim/chattingway/gamble"
 )
 
+// roll returns a string of the result of a dice roll
 func roll(i *discordgo.Interaction) (string, error) {
 	input := i.ApplicationCommandData().Options[0].StringValue()
 	output, value, err := gamble.Roll(input)

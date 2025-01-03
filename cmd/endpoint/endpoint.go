@@ -64,6 +64,9 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		}, err
 	}
 
+	// Create a new Discord session
+	dreamingwayBot, err := dreamingway.NewDreamingway(os.Getenv("DISCORD_BOT_TOKEN"))
+
 	// Handle the interaction
 	switch interaction.Type {
 	// Ping interaction
@@ -89,7 +92,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		)
 
 		// Get deferred response
-		deferredResponse, err := json.Marshal(dreamingway.DeferredMessage())
+		deferredResponse, err := json.Marshal(dreamingwayBot.DeferredMessage())
 		if err != nil {
 			utils.Logger.Errorw("couldn't marshal deferred response",
 				"error", err,

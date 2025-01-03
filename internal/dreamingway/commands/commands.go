@@ -9,6 +9,7 @@ type Command struct {
 }
 
 var (
+	// Map of Command structs
 	Commands = map[string]Command{
 		"coinflip": {
 			Command: discordgo.ApplicationCommand{

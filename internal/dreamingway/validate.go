@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
+// ValidateRequest validates a Discord interaction request
 func ValidateRequest(request events.APIGatewayProxyRequest, publicKey string) error {
 	publicKeyBytes, err := hex.DecodeString(publicKey)
 	if err != nil {

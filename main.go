@@ -8,6 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/goccy/go-yaml"
 
+	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway/commands"
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
@@ -43,7 +44,7 @@ func main() {
 	// Read the YAML file
 	data, err := os.ReadFile("config.yaml")
 	if err != nil {
-		utils.Logger.Errorw("Error reading YAML file",
+		utils.Logger.Errorw("failed to read YAML file",
 			"error", err,
 		)
 		os.Exit(1)
@@ -52,22 +53,22 @@ func main() {
 	// Unmarshal the YAML data into the Config struct
 	var cfg Config
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		utils.Logger.Errorw("Error unmarshalling YAML",
+		utils.Logger.Errorw("failed to unmarshal YAML",
 			"error", err,
 		)
 		os.Exit(1)
 	}
 
 	// Create a new Discord session
-	s, err = discordgo.New("Bot " + cfg.Token)
+	d, err := dreamingway.NewDreamingway(cfg.Token)
 	if err != nil {
-		utils.Logger.Errorw("Error creating Discord session",
+		utils.Logger.Errorw("failed to create Discord session",
 			"error", err,
 		)
 		os.Exit(1)
 	}
-	if err := s.Open(); err != nil {
-		utils.Logger.Errorw("Error opening Discord session",
+	if err := d.Client.Open(); err != nil {
+		utils.Logger.Errorw("failed to open Discord session",
 			"error", err,
 		)
 		os.Exit(1)
@@ -77,7 +78,7 @@ func main() {
 		// Get server name from guild_id
 		guild, err := s.Guild(server.GuildID)
 		if err != nil {
-			utils.Logger.Errorw("Error getting guild",
+			utils.Logger.Errorw("error getting guild",
 				"guild_id", server.GuildID,
 				"error", err,
 			)
@@ -87,7 +88,7 @@ func main() {
 		// Get all commands currently available for the bot
 		curr_cmds, err := s.ApplicationCommands(cfg.AppID, server.GuildID)
 		if err != nil {
-			utils.Logger.Errorw("Error getting current commands",
+			utils.Logger.Errorw("failed to get current commands",
 				"error", err,
 			)
 			os.Exit(1)
@@ -96,14 +97,14 @@ func main() {
 		// Delete all commands
 		for _, cmd := range curr_cmds {
 			if err := s.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
-				utils.Logger.Errorw("Error deleting command",
+				utils.Logger.Errorw("failed to delete command",
 					"command", cmd.Name,
 					"error", err,
 				)
 				os.Exit(1)
 			}
 		}
-		utils.Logger.Infow("Finished deleting all commands",
+		utils.Logger.Infow("finished deleting all commands",
 			"server", guild.Name,
 			"guild_id", server.GuildID,
 		)
@@ -122,7 +123,7 @@ func main() {
 				if commands.Commands[i].Command.Name == cmd {
 					cmd := commands.Commands[i].Command
 					if _, err := s.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
-						utils.Logger.Errorw("Error uploading command",
+						utils.Logger.Errorw("failed to upload command",
 							"command", cmd.Name,
 							"server", guild.Name,
 							"guild_id", server.GuildID,
@@ -130,7 +131,7 @@ func main() {
 						)
 						os.Exit(1)
 					} else {
-						utils.Logger.Infow("Successfully uploaded command",
+						utils.Logger.Infow("successfully uploaded command",
 							"command", cmd.Name,
 							"server", guild.Name,
 							"guild_id", server.GuildID,

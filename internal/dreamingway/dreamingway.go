@@ -16,13 +16,40 @@ const (
 	WEBHOOK_BASE_URL = "https://discord.com/api"
 )
 
-func DeferredMessage() discordgo.InteractionResponse {
+type Dreamingway interface {
+	DeferredMessage() discordgo.InteractionResponse
+}
+
+type DreamingwayBot struct {
+	Client *discordgo.Session
+}
+
+// NewDreamingway creates a new DreamingwayBot instance
+func NewDreamingway(token string) (*DreamingwayBot, error) {
+	client, err := discordgo.New("Bot " + token)
+	if err != nil {
+		if utils.Logger != nil {
+			utils.Logger.Errorw("failed to create discord client",
+				"error", err,
+			)
+		}
+		return nil, err
+	}
+
+	return &DreamingwayBot{
+		Client: client,
+	}, nil
+}
+
+// DeferredMessage returns a deferred message response
+func (d *DreamingwayBot) DeferredMessage() discordgo.InteractionResponse {
 	return discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 	}
 }
 
-func SendDeferredMessage(appID, token, content string) error {
+// SendDeferredMessage sends a deferred message to a Discord channel
+func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error {
 	payload, err := json.Marshal(map[string]string{
 		"content": content,
 	})
