@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 
-	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/mcstatus"
 )
 
 func GetStatus(url string, opts ...Option) (bool, int, error) {

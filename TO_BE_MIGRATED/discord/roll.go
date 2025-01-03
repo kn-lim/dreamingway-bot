@@ -6,7 +6,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/kn-lim/dreamingway-bot/internal/dice"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/dice"
 )
 
 func roll(i *discordgo.Interaction, opts ...Option) (string, error) {

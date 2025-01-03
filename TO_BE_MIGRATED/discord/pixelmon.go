@@ -7,8 +7,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/kn-lim/dreamingway-bot/internal/mcstatus"
-	"github.com/kn-lim/dreamingway-bot/internal/pixelmon"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/mcstatus"
+	"github.com/kn-lim/dreamingway-bot/TO_BE_MIGRATED/pixelmon"
 )
 
 var (
