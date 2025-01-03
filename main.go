@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -21,8 +20,11 @@ var (
 
 type Config struct {
 	AppID   string `yaml:"app_id"`
-	GuildID string `yaml:"guild_id"`
 	Token   string `yaml:"token"`
+	Servers []struct {
+		GuildID  string   `yaml:"guild_id"`
+		Commands []string `yaml:"commands"`
+	} `yaml:"servers"`
 }
 
 func init() {
@@ -41,48 +43,89 @@ func main() {
 	// Read the YAML file
 	data, err := os.ReadFile("config.yaml")
 	if err != nil {
-		fmt.Printf("Error reading YAML file: %v\n", err)
-		return
+		utils.Logger.Errorw("Error reading YAML file",
+			"error", err,
+		)
+		os.Exit(1)
 	}
 
 	// Unmarshal the YAML data into the Config struct
 	var cfg Config
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		fmt.Printf("Error unmarshalling YAML: %v\n", err)
-		return
+		utils.Logger.Errorw("Error unmarshalling YAML",
+			"error", err,
+		)
+		os.Exit(1)
 	}
 
 	// Create a new Discord session
 	s, err = discordgo.New("Bot " + cfg.Token)
 	if err != nil {
-		log.Fatalf("Error! Invalid bot parameters: %v", err)
+		utils.Logger.Errorw("Error creating Discord session",
+			"error", err,
+		)
+		os.Exit(1)
 	}
-
 	if err := s.Open(); err != nil {
-		log.Fatalf("Error! Cannot open the session: %v", err)
+		utils.Logger.Errorw("Error opening Discord session",
+			"error", err,
+		)
+		os.Exit(1)
 	}
 
-	// Get all commands currently available for the bot
-	curr_cmds, err := s.ApplicationCommands(cfg.AppID, cfg.GuildID)
-	if err != nil {
-		log.Fatal("Error! Couldn't get current commands!\n")
-	}
-
-	// Delete all commands
-	for _, cmd := range curr_cmds {
-		if err := s.ApplicationCommandDelete(cfg.AppID, cfg.GuildID, cmd.ID); err != nil {
-			log.Fatalf("Error! Couldn't delete command [%s]: %v", cmd.Name, err)
+	for _, server := range cfg.Servers {
+		// Get all commands currently available for the bot
+		curr_cmds, err := s.ApplicationCommands(cfg.AppID, server.GuildID)
+		if err != nil {
+			utils.Logger.Errorw("Error getting current commands",
+				"error", err,
+			)
+			os.Exit(1)
 		}
-	}
-	fmt.Println("Finished deleting all commands")
 
-	// Add commands
-	for i := range commands.Commands {
-		cmd := commands.Commands[i].Command
-		if _, err := s.ApplicationCommandCreate(cfg.AppID, cfg.GuildID, &cmd); err != nil {
-			log.Fatalf("Error! Couldn't upload command [%s]: %v", cmd.Name, err)
+		// Delete all commands
+		for _, cmd := range curr_cmds {
+			if err := s.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
+				utils.Logger.Errorw("Error deleting command",
+					"command", cmd.Name,
+					"error", err,
+				)
+				os.Exit(1)
+			}
+		}
+		utils.Logger.Infow("Finished deleting all commands",
+			"server", server.GuildID,
+		)
+
+		// Add commands
+		var cmds []string
+		if len(server.Commands) == 0 {
+			for i := range commands.Commands {
+				cmds = append(cmds, commands.Commands[i].Command.Name)
+			}
 		} else {
-			fmt.Printf("Successfully uploaded command [%s]\n", cmd.Name)
+			cmds = server.Commands
+		}
+		for i := range commands.Commands {
+			for _, cmd := range cmds {
+				if commands.Commands[i].Command.Name == cmd {
+					cmd := commands.Commands[i].Command
+					if _, err := s.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
+						utils.Logger.Errorw("Error uploading command",
+							"command", cmd.Name,
+							"server", server.GuildID,
+							"error", err,
+						)
+						os.Exit(1)
+					} else {
+						utils.Logger.Infow("Successfully uploaded command",
+							"command", cmd.Name,
+							"server", server.GuildID,
+						)
+					}
+					continue
+				}
+			}
 		}
 	}
 }
