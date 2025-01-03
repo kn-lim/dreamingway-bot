@@ -18,6 +18,7 @@ const (
 
 type Dreamingway interface {
 	DeferredMessage() discordgo.InteractionResponse
+	SendDeferredMessage(appID, token, content string) error
 }
 
 type DreamingwayBot struct {
@@ -105,4 +106,19 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 	}
 
 	return nil
+}
+
+// GetServerName returns the server name from a guildID
+func (d *DreamingwayBot) GetServerName(guildID string) (string, error) {
+	// Get server name from guild_id
+	guild, err := d.Client.Guild(guildID)
+	if err != nil {
+		utils.Logger.Errorw("error getting guild",
+			"guild_id", guildID,
+			"error", err,
+		)
+		return "", err
+	}
+
+	return guild.Name, nil
 }

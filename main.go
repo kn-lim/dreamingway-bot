@@ -76,9 +76,9 @@ func main() {
 
 	for _, server := range cfg.Servers {
 		// Get server name from guild_id
-		guild, err := d.Client.Guild(server.GuildID)
+		serverName, err := d.GetServerName(server.GuildID)
 		if err != nil {
-			utils.Logger.Errorw("error getting guild",
+			utils.Logger.Errorw("failed to get server name",
 				"guild_id", server.GuildID,
 				"error", err,
 			)
@@ -105,7 +105,7 @@ func main() {
 			}
 		}
 		utils.Logger.Infow("finished deleting all commands",
-			"server", guild.Name,
+			"server", serverName,
 			"guild_id", server.GuildID,
 		)
 
@@ -125,7 +125,7 @@ func main() {
 					if _, err := d.Client.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
 						utils.Logger.Errorw("failed to upload command",
 							"command", cmd.Name,
-							"server", guild.Name,
+							"server", serverName,
 							"guild_id", server.GuildID,
 							"error", err,
 						)
@@ -133,7 +133,7 @@ func main() {
 					} else {
 						utils.Logger.Infow("successfully uploaded command",
 							"command", cmd.Name,
-							"server", guild.Name,
+							"server", serverName,
 							"guild_id", server.GuildID,
 						)
 					}

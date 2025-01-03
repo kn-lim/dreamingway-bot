@@ -87,22 +87,30 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	// Application command interaction
 	case discordgo.InteractionApplicationCommand:
 		// Get username of the user who sent the interaction
-		username := "???"
-		if interaction.Member != nil {
-			username = interaction.Member.User.Username
-		} else if interaction.User != nil {
-			username = interaction.User.Username
+		username := dreamingway.GetUsername(interaction)
+
+		// Get server name
+		serverName, err := dreamingwayBot.GetServerName(interaction.GuildID)
+		if err != nil {
+			utils.Logger.Errorw("failed to get server name",
+				"error", err,
+				"guild_id", interaction.GuildID,
+			)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+			}, err
 		}
 
 		utils.Logger.Infow("received application command interaction",
 			"command", interaction.ApplicationCommandData().Name,
 			"user", username,
+			"server", serverName,
 		)
 
 		// Get deferred response
 		deferredResponse, err := json.Marshal(dreamingwayBot.DeferredMessage())
 		if err != nil {
-			utils.Logger.Errorw("couldn't marshal deferred response",
+			utils.Logger.Errorw("failed to marshal deferred response",
 				"error", err,
 			)
 			return events.APIGatewayProxyResponse{
@@ -113,7 +121,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		// Invoke task function
 		cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("AWS_REGION")))
 		if err != nil {
-			utils.Logger.Errorw("couldn't load default config",
+			utils.Logger.Errorw("failed to load default config",
 				"error", err,
 			)
 			return events.APIGatewayProxyResponse{
@@ -123,7 +131,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		client := lambdaSvc.NewFromConfig(cfg)
 		payload, err := json.Marshal(&interaction)
 		if err != nil {
-			utils.Logger.Errorw("couldn't marshal interaction",
+			utils.Logger.Errorw("failed to marshal interaction",
 				"error", err,
 			)
 			return events.APIGatewayProxyResponse{
@@ -136,7 +144,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			InvocationType: types.InvocationTypeEvent,
 		}
 		if _, err := client.Invoke(ctx, input); err != nil {
-			utils.Logger.Errorw("couldn't invoke task function",
+			utils.Logger.Errorw("failed to invoke task function",
 				"error", err,
 			)
 			return events.APIGatewayProxyResponse{
