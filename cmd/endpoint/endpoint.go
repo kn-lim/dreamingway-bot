@@ -66,6 +66,14 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	// Create a new Discord session
 	dreamingwayBot, err := dreamingway.NewDreamingway(os.Getenv("DISCORD_BOT_TOKEN"))
+	if err != nil {
+		utils.Logger.Errorw("couldn't create a new Discord session",
+			"error", err,
+		)
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+		}, err
+	}
 
 	// Handle the interaction
 	switch interaction.Type {
