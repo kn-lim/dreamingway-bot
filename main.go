@@ -74,6 +74,16 @@ func main() {
 	}
 
 	for _, server := range cfg.Servers {
+		// Get server name from guild_id
+		guild, err := s.Guild(server.GuildID)
+		if err != nil {
+			utils.Logger.Errorw("Error getting guild",
+				"guild_id", server.GuildID,
+				"error", err,
+			)
+			os.Exit(1)
+		}
+
 		// Get all commands currently available for the bot
 		curr_cmds, err := s.ApplicationCommands(cfg.AppID, server.GuildID)
 		if err != nil {
@@ -94,7 +104,8 @@ func main() {
 			}
 		}
 		utils.Logger.Infow("Finished deleting all commands",
-			"server", server.GuildID,
+			"server", guild.Name,
+			"guild_id", server.GuildID,
 		)
 
 		// Add commands
@@ -113,14 +124,16 @@ func main() {
 					if _, err := s.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
 						utils.Logger.Errorw("Error uploading command",
 							"command", cmd.Name,
-							"server", server.GuildID,
+							"server", guild.Name,
+							"guild_id", server.GuildID,
 							"error", err,
 						)
 						os.Exit(1)
 					} else {
 						utils.Logger.Infow("Successfully uploaded command",
 							"command", cmd.Name,
-							"server", server.GuildID,
+							"server", guild.Name,
+							"guild_id", server.GuildID,
 						)
 					}
 					continue
