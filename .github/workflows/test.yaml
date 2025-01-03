@@ -32,7 +32,7 @@ jobs:
     - name: Run tests
       run: go test -coverprofile=coverage.out ./internal/...
 
-    - name: Send coverage
-      uses: shogo82148/actions-goveralls@v2
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
       with:
-        path-to-profile: coverage.out
+        file: ./coverage.out
