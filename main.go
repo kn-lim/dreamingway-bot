@@ -76,7 +76,7 @@ func main() {
 
 	for _, server := range cfg.Servers {
 		// Get server name from guild_id
-		guild, err := s.Guild(server.GuildID)
+		guild, err := d.Client.Guild(server.GuildID)
 		if err != nil {
 			utils.Logger.Errorw("error getting guild",
 				"guild_id", server.GuildID,
@@ -86,7 +86,7 @@ func main() {
 		}
 
 		// Get all commands currently available for the bot
-		curr_cmds, err := s.ApplicationCommands(cfg.AppID, server.GuildID)
+		curr_cmds, err := d.Client.ApplicationCommands(cfg.AppID, server.GuildID)
 		if err != nil {
 			utils.Logger.Errorw("failed to get current commands",
 				"error", err,
@@ -96,7 +96,7 @@ func main() {
 
 		// Delete all commands
 		for _, cmd := range curr_cmds {
-			if err := s.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
+			if err := d.Client.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
 				utils.Logger.Errorw("failed to delete command",
 					"command", cmd.Name,
 					"error", err,
@@ -122,7 +122,7 @@ func main() {
 			for _, cmd := range cmds {
 				if commands.Commands[i].Command.Name == cmd {
 					cmd := commands.Commands[i].Command
-					if _, err := s.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
+					if _, err := d.Client.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
 						utils.Logger.Errorw("failed to upload command",
 							"command", cmd.Name,
 							"server", guild.Name,
