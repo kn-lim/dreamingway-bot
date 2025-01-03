@@ -19,7 +19,9 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
 - [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2)
+- [chattingway](https://github.com/kn-lim/chattingway)
 - [discordgo](https://github.com/bwmarrin/discordgo/)
+- [zap](https://github.com/uber-go/zap)
 
 # Using the Discord Bot
 
@@ -37,7 +39,7 @@ Zip the bootstrap binaries and upload it to the Lambda functions.
 1. Rename `config.example.yaml` to `config.yaml` and add in the values.
 2. From the project directory, run the following command:
 
-`go run . -config=config.yaml`
+`go run . -config config.yaml`
 
 ## Environment Variables
 
@@ -89,4 +91,11 @@ Get the **endpoint** Lambda API Gateway triggers' `API endpoint` and add it to t
 
 In the OAuth2 URL Generator, give the following scopes when adding the bot to a server:
 
+#### Scopes
+
 - `applications.commands`
+- `bot`
+
+#### Bot Permissions
+
+- `Manage Roles`
