@@ -72,7 +72,7 @@ func handler(interaction discordgo.Interaction) error {
 				"server", serverName,
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed.", interaction.ApplicationCommandData().Name))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed.\nError: `%s`", interaction.ApplicationCommandData().Name, err))
 		}
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		utils.Logger.Infow("running option handler",
@@ -89,7 +89,7 @@ func handler(interaction discordgo.Interaction) error {
 				"server", serverName,
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed.", interaction.ApplicationCommandData().Name))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed.\nError: `%s`", interaction.ApplicationCommandData().Name, err))
 		}
 	}
 

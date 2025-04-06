@@ -16,5 +16,5 @@ func roll(i *discordgo.Interaction) (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("%s = **%d**", output, value), nil
+	return fmt.Sprintf("Rolled `%s` = **%d**", output, value), nil
 }
