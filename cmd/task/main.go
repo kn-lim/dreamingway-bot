@@ -52,7 +52,7 @@ func handler(interaction discordgo.Interaction) error {
 			"username", username,
 			"server", serverName,
 		)
-		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, "Error! Command does not exist.")
+		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, "**Error**! Command does not exist.")
 	}
 
 	// Run command handler
@@ -72,7 +72,7 @@ func handler(interaction discordgo.Interaction) error {
 				"server", serverName,
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s handler failed: `%s`", interaction.ApplicationCommandData().Name, err))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.ApplicationCommandData().Name, err))
 		}
 	} else if cmd.Options[interaction.ApplicationCommandData().Options[0].Name] != nil {
 		utils.Logger.Infow("running option handler",
@@ -89,7 +89,7 @@ func handler(interaction discordgo.Interaction) error {
 				"server", serverName,
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! /%s option handler failed: `%s`", interaction.ApplicationCommandData().Name, err))
+			return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("**Error**! /%s option handler failed: `%s`", interaction.ApplicationCommandData().Name, err))
 		}
 	}
 
@@ -99,7 +99,7 @@ func handler(interaction discordgo.Interaction) error {
 			"username", username,
 			"server", serverName,
 		)
-		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("Error! Got empty message for /%s.", interaction.ApplicationCommandData().Name))
+		return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, fmt.Sprintf("**Error**! Got empty message for /%s.", interaction.ApplicationCommandData().Name))
 	}
 
 	return dreamingwayBot.SendDeferredMessage(interaction.AppID, interaction.Token, msg)
