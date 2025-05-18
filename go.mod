@@ -6,10 +6,7 @@ require (
 	github.com/aws/aws-lambda-go v1.48.0
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.218.0
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.71.2
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.51.1
-	github.com/aws/aws-sdk-go-v2/service/ssm v1.59.0
 	github.com/bwmarrin/discordgo v0.28.1
 	github.com/goccy/go-yaml v1.17.1
 	github.com/kn-lim/chattingway v1.4.0
