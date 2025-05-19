@@ -1,0 +1,11 @@
+{
+  "app_id": "",
+  "token": "",
+  "global_commands": [""],
+  "servers": [
+    {
+      "guild_id": "",
+      "commands": [""]
+    }
+  ]
+}
