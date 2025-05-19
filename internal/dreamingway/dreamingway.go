@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/disgoorg/disgo"
+	"github.com/disgoorg/disgo/bot"
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
@@ -17,17 +18,18 @@ const (
 )
 
 type Dreamingway interface {
-	DeferredMessage() discordgo.InteractionResponse
+	// DeferredMessage() discordgo.InteractionResponse
 	SendDeferredMessage(appID, token, content string) error
 }
 
 type DreamingwayBot struct {
-	Client *discordgo.Session
+	Client bot.Client
 }
 
 // NewDreamingway creates a new DreamingwayBot instance
 func NewDreamingway(token string) (*DreamingwayBot, error) {
-	client, err := discordgo.New("Bot " + token)
+	// client, err := discordgo.New("Bot " + token)
+	client, err := disgo.New(token)
 	if err != nil {
 		if utils.Logger != nil {
 			utils.Logger.Errorw("failed to create discord client",
@@ -43,11 +45,11 @@ func NewDreamingway(token string) (*DreamingwayBot, error) {
 }
 
 // DeferredMessage returns a deferred message response
-func (d *DreamingwayBot) DeferredMessage() discordgo.InteractionResponse {
-	return discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
-	}
-}
+// func (d *DreamingwayBot) DeferredMessage() discordgo.InteractionResponse {
+// 	return discordgo.InteractionResponse{
+// 		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+// 	}
+// }
 
 // SendDeferredMessage sends a deferred message to a Discord channel
 func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error {
@@ -89,7 +91,7 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		var result map[string]interface{}
+		var result map[string]any
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 			if utils.Logger != nil {
 				utils.Logger.Errorw("failed to decode response body",
@@ -109,16 +111,16 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 }
 
 // GetServerName returns the server name from a guildID
-func (d *DreamingwayBot) GetServerName(guildID string) (string, error) {
-	// Get server name from guild_id
-	guild, err := d.Client.Guild(guildID)
-	if err != nil {
-		utils.Logger.Errorw("error getting guild",
-			"guild_id", guildID,
-			"error", err,
-		)
-		return "", err
-	}
+// func (d *DreamingwayBot) GetServerName(guildID string) (string, error) {
+// 	// Get server name from guild_id
+// 	guild, err := d.Client.Guild(guildID)
+// 	if err != nil {
+// 		utils.Logger.Errorw("error getting guild",
+// 			"guild_id", guildID,
+// 			"error", err,
+// 		)
+// 		return "", err
+// 	}
 
-	return guild.Name, nil
-}
+// 	return guild.Name, nil
+// }

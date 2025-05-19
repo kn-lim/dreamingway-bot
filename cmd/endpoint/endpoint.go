@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	lambdaSvc "github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
-	"github.com/bwmarrin/discordgo"
+	"github.com/disgoorg/disgo/discord"
 
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
@@ -53,8 +53,8 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	}
 
 	// Get discord interaction
-	var interaction discordgo.Interaction
-	if err := json.Unmarshal(body, &interaction); err != nil {
+	interaction, err := discord.UnmarshalInteraction(body)
+	if err != nil {
 		utils.Logger.Errorw("couldn't unmarshal interaction",
 			"error", err,
 			"body", string(body),
@@ -64,51 +64,25 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		}, err
 	}
 
-	// Create a new Discord session
-	dreamingwayBot, err := dreamingway.NewDreamingway(os.Getenv("DISCORD_BOT_TOKEN"))
-	if err != nil {
-		utils.Logger.Errorw("couldn't create a new Discord session",
-			"error", err,
-		)
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-		}, err
-	}
-
 	// Handle the interaction
-	switch interaction.Type {
+	switch interaction.Type() {
 	// Ping interaction
-	case discordgo.InteractionPing:
+	case discord.InteractionTypePing:
 		utils.Logger.Info("received ping interaction")
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusOK,
 			Body:       `{"type": 1}`,
 		}, nil
 	// Application command interaction
-	case discordgo.InteractionApplicationCommand:
-		// Get username of the user who sent the interaction
-		username := dreamingway.GetUsername(interaction)
-
-		// Get server name
-		serverName, err := dreamingwayBot.GetServerName(interaction.GuildID)
-		if err != nil {
-			utils.Logger.Errorw("failed to get server name",
-				"error", err,
-				"guild_id", interaction.GuildID,
-			)
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-			}, err
-		}
-
+	case discord.InteractionTypeApplicationCommand:
 		utils.Logger.Infow("received application command interaction",
-			"command", interaction.ApplicationCommandData().Name,
-			"user", username,
-			"server", serverName,
+			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+			"user", interaction.User().Username,
+			"guildID", interaction.(discord.ApplicationCommandInteraction).Data.GuildID().String(),
 		)
 
 		// Get deferred response
-		deferredResponse, err := json.Marshal(dreamingwayBot.DeferredMessage())
+		deferredResponse, err := json.Marshal(dreamingway.GetDeferredMessageResponse())
 		if err != nil {
 			utils.Logger.Errorw("failed to marshal deferred response",
 				"error", err,

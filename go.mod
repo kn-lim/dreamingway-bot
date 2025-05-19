@@ -8,7 +8,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.71.2
 	github.com/bwmarrin/discordgo v0.28.1
-	github.com/goccy/go-yaml v1.17.1
+	github.com/disgoorg/disgo v0.18.16
+	github.com/disgoorg/snowflake/v2 v2.0.3
 	github.com/kn-lim/chattingway v1.4.0
 	go.uber.org/zap v1.27.0
 )
@@ -26,7 +27,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.19 // indirect
 	github.com/aws/smithy-go v1.22.3 // indirect
+	github.com/disgoorg/json v1.2.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
