@@ -18,7 +18,11 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 	// Delete all global commands
 	var deletedCmds []string
 	for _, cmd := range curr_cmds {
-		if err := client.DeleteGlobalCommand(applicationID, cmd.ApplicationID()); err != nil {
+		if err := client.DeleteGlobalCommand(applicationID, cmd.ID()); err != nil {
+			utils.Logger.Errorw("failed to delete global command",
+				"command_id", cmd.ID(),
+				"command_name", cmd.Name(),
+			)
 			return err
 		}
 
@@ -26,7 +30,6 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 	}
 	if utils.Logger != nil {
 		utils.Logger.Infow("deleted global commands",
-			"application_id", applicationID,
 			"commands", deletedCmds,
 		)
 	}
@@ -38,6 +41,9 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 
 	// Set new global commands
 	if _, err := client.SetGlobalCommands(applicationID, cmdSlice); err != nil {
+		utils.Logger.Errorw("failed to set global commands",
+			"commands", cmdSlice,
+		)
 		return err
 	}
 	var newCmds []string
@@ -46,7 +52,6 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 	}
 	if utils.Logger != nil {
 		utils.Logger.Infow("synced global commands",
-			"application_id", applicationID,
 			"commands", newCmds,
 		)
 	}
@@ -65,7 +70,11 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 	// Delete all guild commands
 	var deletedCmds []string
 	for _, cmd := range curr_cmds {
-		if err := client.DeleteGuildCommand(applicationID, guildID, cmd.ApplicationID()); err != nil {
+		if err := client.DeleteGuildCommand(applicationID, guildID, cmd.ID()); err != nil {
+			utils.Logger.Errorw("failed to delete guild command",
+				"command_id", cmd.ID(),
+				"command_name", cmd.Name(),
+			)
 			return err
 		}
 
@@ -73,7 +82,6 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 	}
 	if utils.Logger != nil {
 		utils.Logger.Infow("deleted guild commands",
-			"application_id", applicationID,
 			"guild_id", guildID,
 			"commands", deletedCmds,
 		)
@@ -86,6 +94,10 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 
 	// Set new guild commands
 	if _, err := client.SetGuildCommands(applicationID, guildID, cmdSlice); err != nil {
+		utils.Logger.Errorw("failed to set guild commands",
+			"guild_id", guildID,
+			"commands", cmdSlice,
+		)
 		return err
 	}
 	var newCmds []string
@@ -94,7 +106,6 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 	}
 	if utils.Logger != nil {
 		utils.Logger.Infow("synced guild commands",
-			"application_id", applicationID,
 			"guild_id", guildID,
 			"commands", newCmds,
 		)
