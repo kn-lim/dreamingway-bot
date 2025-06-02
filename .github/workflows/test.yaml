@@ -29,6 +29,12 @@ jobs:
     - name: Install dependencies
       run: go mod download
 
+    - name: Build binaries
+      run: |
+        go build -o cli .
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o endpoint ./cmd/endpoint/
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o task ./cmd/task/
+
     - name: Run tests
       run: go test -coverprofile=coverage.out ./internal/...
 

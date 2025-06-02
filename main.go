@@ -1,142 +1,150 @@
 package main
 
 import (
-	"flag"
+	"context"
+	"fmt"
 	"log"
 	"os"
 
-	"github.com/goccy/go-yaml"
-
+	"github.com/disgoorg/snowflake/v2"
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway/commands"
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
+	"github.com/knadh/koanf/parsers/json"
+	"github.com/knadh/koanf/providers/file"
+	"github.com/knadh/koanf/providers/rawbytes"
+	"github.com/knadh/koanf/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
-	ConfigPath = flag.String("config", "config.yaml", "Path to the config file")
+	k = koanf.New(".")
+
+	cfg Config
 )
 
 type Config struct {
-	AppID   string `yaml:"app_id"`
-	Token   string `yaml:"token"`
-	Servers []struct {
-		GuildID  string   `yaml:"guild_id"`
-		Commands []string `yaml:"commands"`
-	} `yaml:"servers"`
-}
-
-func init() {
-	flag.Parse()
-
-	// Initialize logger
-	var err error
-	utils.Logger, err = utils.NewLogger()
-	if err != nil {
-		log.Printf("couldn't initialize logger: %v", err)
-		os.Exit(1)
-	}
+	AppID          string   `koanf:"app_id"`
+	Token          string   `koanf:"token"`
+	GlobalCommands []string `koanf:"global_commands"`
+	Guilds         []struct {
+		GuildID  string   `koanf:"guild_id"`
+		Commands []string `koanf:"commands"`
+	} `koanf:"guilds"`
 }
 
 func main() {
-	// Read the YAML file
-	data, err := os.ReadFile("config.yaml")
-	if err != nil {
-		utils.Logger.Errorw("failed to read YAML file",
-			"error", err,
-		)
-		os.Exit(1)
-	}
-
-	// Unmarshal the YAML data into the Config struct
-	var cfg Config
-	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		utils.Logger.Errorw("failed to unmarshal YAML",
-			"error", err,
-		)
-		os.Exit(1)
-	}
-
-	// Create a new Discord session
-	d, err := dreamingway.NewDreamingway(cfg.Token)
-	if err != nil {
-		utils.Logger.Errorw("failed to create Discord session",
-			"error", err,
-		)
-		os.Exit(1)
-	}
-	if err := d.Client.Open(); err != nil {
-		utils.Logger.Errorw("failed to open Discord session",
-			"error", err,
-		)
-		os.Exit(1)
-	}
-
-	for _, server := range cfg.Servers {
-		// Get server name from guild_id
-		serverName, err := d.GetServerName(server.GuildID)
-		if err != nil {
-			utils.Logger.Errorw("failed to get server name",
-				"guild_id", server.GuildID,
-				"error", err,
-			)
-			os.Exit(1)
-		}
-
-		// Get all commands currently available for the bot
-		curr_cmds, err := d.Client.ApplicationCommands(cfg.AppID, server.GuildID)
-		if err != nil {
-			utils.Logger.Errorw("failed to get current commands",
-				"error", err,
-			)
-			os.Exit(1)
-		}
-
-		// Delete all commands
-		for _, cmd := range curr_cmds {
-			if err := d.Client.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
-				utils.Logger.Errorw("failed to delete command",
-					"command", cmd.Name,
-					"error", err,
-				)
-				os.Exit(1)
+	cmd := &cli.Command{
+		Name:  "dreamingway",
+		Usage: "Sync Discord commands",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "verbose",
+				Aliases: []string{"v"},
+				Usage:   "Enable verbose logging",
+				Value:   false,
+			},
+			&cli.StringFlag{
+				Name:    "config",
+				Aliases: []string{"c"},
+				Usage:   "Path to the configuration file",
+				Value:   "config.json",
+			},
+			&cli.StringFlag{
+				Name:  "config-string",
+				Usage: "Configuration as a JSON string",
+				Value: "",
+			},
+		},
+		Before: func(ctx context.Context, cmd *cli.Command) (context.Context, error) {
+			// Initialize logger
+			var err error
+			utils.Logger, err = utils.NewLogger(cmd.Bool("verbose"))
+			if err != nil {
+				return ctx, fmt.Errorf("couldn't initialize logger: %w", err)
 			}
-		}
-		utils.Logger.Infow("finished deleting all commands",
-			"server", serverName,
-			"guild_id", server.GuildID,
-		)
 
-		// Add commands
-		var cmds []string
-		if len(server.Commands) == 0 {
-			for i := range commands.Commands {
-				cmds = append(cmds, commands.Commands[i].Command.Name)
-			}
-		} else {
-			cmds = server.Commands
-		}
-		for i := range commands.Commands {
-			for _, cmd := range cmds {
-				if commands.Commands[i].Command.Name == cmd {
-					cmd := commands.Commands[i].Command
-					if _, err := d.Client.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
-						utils.Logger.Errorw("failed to upload command",
-							"command", cmd.Name,
-							"server", serverName,
-							"guild_id", server.GuildID,
-							"error", err,
-						)
-						os.Exit(1)
-					} else {
-						utils.Logger.Infow("successfully uploaded command",
-							"command", cmd.Name,
-							"server", serverName,
-							"guild_id", server.GuildID,
-						)
-					}
-					continue
+			// Check if config string is provided
+			if cmd.String("config-string") != "" {
+				// Parse the config string
+				if err := k.Load(rawbytes.Provider([]byte(cmd.String("config-string"))), json.Parser()); err != nil {
+					return ctx, fmt.Errorf("failed to load config string: %w", err)
+				}
+			} else {
+				// Read the config file
+				configFilePath := cmd.String("config")
+				if _, err := os.Stat(configFilePath); err != nil {
+					return ctx, fmt.Errorf("config file not found: %w", err)
+				}
+				if err := k.Load(file.Provider(configFilePath), json.Parser()); err != nil {
+					return ctx, fmt.Errorf("failed to load config file: %w", err)
 				}
 			}
-		}
+
+			if err := k.Unmarshal("", &cfg); err != nil {
+				return ctx, fmt.Errorf("failed to unmarshal config: %w", err)
+			}
+
+			// utils.Logger.Infow("config loaded from file",
+			// 	"config", cfg,
+			// )
+
+			return ctx, nil
+		},
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			// Create a new Discord session
+			d, err := dreamingway.NewDreamingway(cfg.Token)
+			if err != nil {
+				return cli.Exit(fmt.Sprintf("failed to create discord session: %v", err), 1)
+			}
+
+			applicationID, err := snowflake.Parse(cfg.AppID)
+			if err != nil {
+				return cli.Exit(fmt.Sprintf("failed to parse application ID: %v", err), 1)
+			}
+
+			// Sync global commands
+			if err := commands.SyncGlobalCommands(d.Client.Rest(), applicationID, commands.GlobalCommands); err != nil {
+				return cli.Exit(fmt.Sprintf("failed to sync global commands: %v", err), 1)
+			}
+
+			if !cmd.Bool("verbose") {
+				fmt.Println("Global commands synced successfully.")
+			}
+
+			for _, server := range cfg.Guilds {
+				snowflakeID, err := snowflake.Parse(server.GuildID)
+				if err != nil {
+					return cli.Exit(fmt.Sprintf("failed to parse guild ID: %v", err), 1)
+				}
+				// Check for server specific commands
+				if len(server.Commands) == 0 {
+					continue
+				}
+
+				// Sync guild commands
+				cmds := make(map[string]commands.Command)
+				for key, serverCmd := range commands.Commands {
+					for _, cmd := range server.Commands {
+						if serverCmd.Command.CommandName() == cmd {
+							cmds[key] = serverCmd
+						}
+					}
+				}
+				if err := commands.SyncGuildCommands(d.Client.Rest(), applicationID, snowflakeID, cmds); err != nil {
+					return cli.Exit(fmt.Sprintf("failed to sync guild commands: %v", err), 1)
+				}
+			}
+
+			if !cmd.Bool("verbose") {
+				fmt.Println("Guild commands synced successfully.")
+			}
+
+			return nil
+		},
+	}
+
+	if err := cmd.Run(context.Background(), os.Args); err != nil {
+		log.Fatal(err)
 	}
 }
