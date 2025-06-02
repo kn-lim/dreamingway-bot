@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/snowflake/v2"
 
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
@@ -107,15 +106,6 @@ func main() {
 	}
 
 	for _, server := range cfg.Servers {
-		// Get server name from guild_id
-		// serverName, err := d.GetServerName(server.GuildID)
-		// if err != nil {
-		// 	utils.Logger.Errorw("failed to get server name",
-		// 		"guild_id", server.GuildID,
-		// 		"error", err,
-		// 	)
-		// 	os.Exit(1)
-		// }
 		snowflakeID, err := snowflake.Parse(server.GuildID)
 		if err != nil {
 			utils.Logger.Errorw("failed to parse guild ID",
@@ -124,26 +114,17 @@ func main() {
 			)
 			os.Exit(1)
 		}
-		// guild, err := d.Client.Rest().GetGuild(snowflakeID, false)
-		// if err != nil {
-		// 	utils.Logger.Errorw("failed to get guild",
-		// 		"guild_id", server.GuildID,
-		// 		"error", err,
-		// 	)
-		// 	os.Exit(1)
-		// }
-
 		// Check for server specific commands
 		if len(server.Commands) == 0 {
 			continue
 		}
 
 		// Sync guild commands
-		var cmds []discord.ApplicationCommandCreate
-		for i := range commands.Commands {
+		cmds := make(map[string]commands.Command)
+		for key, serverCmd := range commands.Commands {
 			for _, cmd := range server.Commands {
-				if commands.Commands[i].CommandName() == cmd {
-					cmds = append(cmds, commands.Commands[i])
+				if serverCmd.Command.CommandName() == cmd {
+					cmds[key] = serverCmd
 				}
 			}
 		}
@@ -154,62 +135,5 @@ func main() {
 			)
 			os.Exit(1)
 		}
-
-		// Get all commands currently available for the bot
-		// curr_cmds, err := d.Client.ApplicationCommands(cfg.AppID, server.GuildID)
-		// if err != nil {
-		// 	utils.Logger.Errorw("failed to get current commands",
-		// 		"error", err,
-		// 	)
-		// 	os.Exit(1)
-		// }
-
-		// Delete all commands
-		// for _, cmd := range curr_cmds {
-		// 	if err := d.Client.ApplicationCommandDelete(cfg.AppID, server.GuildID, cmd.ID); err != nil {
-		// 		utils.Logger.Errorw("failed to delete command",
-		// 			"command", cmd.Name,
-		// 			"error", err,
-		// 		)
-		// 		os.Exit(1)
-		// 	}
-		// }
-		// utils.Logger.Infow("finished deleting all commands",
-		// 	"server", guild.Name,
-		// 	"guild_id", server.GuildID,
-		// )
-
-		// Add commands
-		// var cmds []string
-		// if len(server.Commands) == 0 {
-		// 	for i := range commands.Commands {
-		// 		cmds = append(cmds, commands.Commands[i].Command.Name)
-		// 	}
-		// } else {
-		// 	cmds = server.Commands
-		// }
-		// for i := range commands.Commands {
-		// 	for _, cmd := range cmds {
-		// 		if commands.Commands[i].Command.Name == cmd {
-		// 			cmd := commands.Commands[i].Command
-		// 			if _, err := d.Client.ApplicationCommandCreate(cfg.AppID, server.GuildID, &cmd); err != nil {
-		// 				utils.Logger.Errorw("failed to upload command",
-		// 					"command", cmd.Name,
-		// 					"server", serverName,
-		// 					"guild_id", server.GuildID,
-		// 					"error", err,
-		// 				)
-		// 				os.Exit(1)
-		// 			} else {
-		// 				utils.Logger.Infow("successfully uploaded command",
-		// 					"command", cmd.Name,
-		// 					"server", serverName,
-		// 					"guild_id", server.GuildID,
-		// 				)
-		// 			}
-		// 			continue
-		// 		}
-		// 	}
-		// }
 	}
 }

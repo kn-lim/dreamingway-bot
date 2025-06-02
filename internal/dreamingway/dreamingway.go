@@ -44,13 +44,6 @@ func NewDreamingway(token string) (*DreamingwayBot, error) {
 	}, nil
 }
 
-// DeferredMessage returns a deferred message response
-// func (d *DreamingwayBot) DeferredMessage() discordgo.InteractionResponse {
-// 	return discordgo.InteractionResponse{
-// 		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
-// 	}
-// }
-
 // SendDeferredMessage sends a deferred message to a Discord channel
 func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error {
 	payload, err := json.Marshal(map[string]string{
@@ -109,18 +102,3 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 
 	return nil
 }
-
-// GetServerName returns the server name from a guildID
-// func (d *DreamingwayBot) GetServerName(guildID string) (string, error) {
-// 	// Get server name from guild_id
-// 	guild, err := d.Client.Guild(guildID)
-// 	if err != nil {
-// 		utils.Logger.Errorw("error getting guild",
-// 			"guild_id", guildID,
-// 			"error", err,
-// 		)
-// 		return "", err
-// 	}
-
-// 	return guild.Name, nil
-// }

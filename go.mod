@@ -3,11 +3,11 @@ module github.com/kn-lim/dreamingway-bot
 go 1.24.3
 
 require (
+	dario.cat/mergo v1.0.2
 	github.com/aws/aws-lambda-go v1.48.0
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.71.2
-	github.com/bwmarrin/discordgo v0.28.1
 	github.com/disgoorg/disgo v0.18.16
 	github.com/disgoorg/snowflake/v2 v2.0.3
 	github.com/kn-lim/chattingway v1.4.0

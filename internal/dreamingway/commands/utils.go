@@ -8,7 +8,7 @@ import (
 )
 
 // SyncGlobalCommands syncs the global commands with the provided commands
-func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands []discord.ApplicationCommandCreate) error {
+func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands map[string]Command) error {
 	// Get current global commands
 	curr_cmds, err := client.GetGlobalCommands(applicationID, false)
 	if err != nil {
@@ -31,12 +31,17 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands [
 		)
 	}
 
+	var cmdSlice []discord.ApplicationCommandCreate
+	for _, cmd := range commands {
+		cmdSlice = append(cmdSlice, cmd.Command)
+	}
+
 	// Set new global commands
-	if _, err := client.SetGlobalCommands(applicationID, commands); err != nil {
+	if _, err := client.SetGlobalCommands(applicationID, cmdSlice); err != nil {
 		return err
 	}
 	var newCmds []string
-	for _, cmd := range commands {
+	for _, cmd := range cmdSlice {
 		newCmds = append(newCmds, cmd.CommandName())
 	}
 	if utils.Logger != nil {
@@ -50,7 +55,7 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands [
 }
 
 // SyncGuildCommands syncs the guild commands with the provided commands
-func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, commands []discord.ApplicationCommandCreate) error {
+func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, commands map[string]Command) error {
 	// Get current guild commands
 	curr_cmds, err := client.GetGuildCommands(applicationID, guildID, false)
 	if err != nil {
@@ -74,12 +79,17 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 		)
 	}
 
+	var cmdSlice []discord.ApplicationCommandCreate
+	for _, cmd := range commands {
+		cmdSlice = append(cmdSlice, cmd.Command)
+	}
+
 	// Set new guild commands
-	if _, err := client.SetGuildCommands(applicationID, guildID, commands); err != nil {
+	if _, err := client.SetGuildCommands(applicationID, guildID, cmdSlice); err != nil {
 		return err
 	}
 	var newCmds []string
-	for _, cmd := range commands {
+	for _, cmd := range cmdSlice {
 		newCmds = append(newCmds, cmd.CommandName())
 	}
 	if utils.Logger != nil {
