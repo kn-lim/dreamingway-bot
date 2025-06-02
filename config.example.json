@@ -2,7 +2,7 @@
   "app_id": "",
   "token": "",
   "global_commands": [""],
-  "servers": [
+  "guilds": [
     {
       "guild_id": "",
       "commands": [""]
