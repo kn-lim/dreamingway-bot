@@ -16,7 +16,7 @@ import (
 func handler(interaction discord.Interaction) error {
 	// Initialize logger
 	var err error
-	utils.Logger, err = utils.NewLogger()
+	utils.Logger, err = utils.NewLogger(true)
 	if err != nil {
 		log.Printf("couldn't initialize logger: %v", err)
 		return err

@@ -38,6 +38,12 @@ func main() {
 		Name:  "dreamingway",
 		Usage: "Sync Discord commands",
 		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "verbose",
+				Aliases: []string{"v"},
+				Usage:   "Enable verbose logging",
+				Value:   false,
+			},
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
@@ -50,23 +56,23 @@ func main() {
 				Value: "",
 			},
 		},
-		Before: func(ctx context.Context, c *cli.Command) (context.Context, error) {
+		Before: func(ctx context.Context, cmd *cli.Command) (context.Context, error) {
 			// Initialize logger
 			var err error
-			utils.Logger, err = utils.NewLogger()
+			utils.Logger, err = utils.NewLogger(cmd.Bool("verbose"))
 			if err != nil {
 				return ctx, fmt.Errorf("couldn't initialize logger: %w", err)
 			}
 
 			// Check if config string is provided
-			if c.String("config-string") != "" {
+			if cmd.String("config-string") != "" {
 				// Parse the config string
-				if err := k.Load(rawbytes.Provider([]byte(c.String("config-string"))), json.Parser()); err != nil {
+				if err := k.Load(rawbytes.Provider([]byte(cmd.String("config-string"))), json.Parser()); err != nil {
 					return ctx, fmt.Errorf("failed to load config string: %w", err)
 				}
 			} else {
 				// Read the config file
-				configFilePath := c.String("config")
+				configFilePath := cmd.String("config")
 				if _, err := os.Stat(configFilePath); err != nil {
 					return ctx, fmt.Errorf("config file not found: %w", err)
 				}
@@ -102,6 +108,10 @@ func main() {
 				return cli.Exit(fmt.Sprintf("failed to sync global commands: %v", err), 1)
 			}
 
+			if !cmd.Bool("verbose") {
+				fmt.Println("Global commands synced successfully.")
+			}
+
 			for _, server := range cfg.Guilds {
 				snowflakeID, err := snowflake.Parse(server.GuildID)
 				if err != nil {
@@ -124,6 +134,10 @@ func main() {
 				if err := commands.SyncGuildCommands(d.Client.Rest(), applicationID, snowflakeID, cmds); err != nil {
 					return cli.Exit(fmt.Sprintf("failed to sync guild commands: %v", err), 1)
 				}
+			}
+
+			if !cmd.Bool("verbose") {
+				fmt.Println("Guild commands synced successfully.")
 			}
 
 			return nil
