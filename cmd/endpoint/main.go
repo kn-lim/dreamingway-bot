@@ -71,7 +71,10 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		utils.Logger.Info("received ping interaction")
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusOK,
-			Body:       `{"type": 1}`,
+			Headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			Body: `{"type": 1}`,
 		}, nil
 	// Application command interaction
 	case discord.InteractionTypeApplicationCommand:
@@ -129,7 +132,10 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		// Return deferred response
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusOK,
-			Body:       string(deferredResponse),
+			Headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			Body: string(deferredResponse),
 		}, nil
 	// Unknown interaction
 	default:
