@@ -46,10 +46,23 @@ Zip the bootstrap binaries and upload it to the Lambda functions.
 
 ## Syncing Commands with Discord
 
-1. Rename `config.example.yaml` to `config.yaml` and add in the values.
-2. From the project directory, run the following command:
+1. Rename `config.example.json` to `config.json` and add in the values.
+2. From the project directory, run the following command: `go run .`
 
-`go run . -config config.yaml`
+
+```
+NAME:
+   dreamingway - Sync Discord commands
+
+USAGE:
+   dreamingway [global options]
+
+GLOBAL OPTIONS:
+   --verbose, -v               Enable verbose logging (default: false)
+   --config string, -c string  Path to the configuration file (default: "config.json")
+   --config-string string      Configuration as a JSON string
+   --help, -h                  show help
+```
 
 ## Environment Variables
 
