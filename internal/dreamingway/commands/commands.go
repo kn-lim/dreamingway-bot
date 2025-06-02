@@ -8,7 +8,8 @@ import (
 type Command struct {
 	Command discord.ApplicationCommandCreate
 	Handler func(discord.Interaction) (string, error)
-	Options map[string]func(discord.Interaction) (string, error)
+	// TODO: Implement options for commands
+	// Options map[string]func(discord.Interaction) (string, error)
 }
 
 var (
@@ -19,7 +20,6 @@ var (
 				Description: "Flips a coin",
 			},
 			Handler: coinflip,
-			Options: nil,
 		},
 		"ping": {
 			Command: discord.SlashCommandCreate{
@@ -27,7 +27,6 @@ var (
 				Description: "Ping",
 			},
 			Handler: ping,
-			Options: nil,
 		},
 		"roll": {
 			Command: discord.SlashCommandCreate{
@@ -42,7 +41,6 @@ var (
 				},
 			},
 			Handler: roll,
-			Options: nil,
 		},
 	}
 
