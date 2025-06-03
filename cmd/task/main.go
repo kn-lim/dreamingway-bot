@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -13,7 +14,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-func handler(interaction discord.Interaction) error {
+func handler(ctx context.Context, interaction discord.Interaction) error {
 	// Initialize logger
 	var err error
 	utils.Logger, err = utils.NewLogger(true)

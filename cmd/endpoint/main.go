@@ -38,10 +38,6 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		}, err
 	}
 
-	utils.Logger.Infow("received request",
-		"request", request,
-	)
-
 	// Parse the request body
 	var body []byte
 	if request.IsBase64Encoded {
@@ -67,13 +63,6 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			StatusCode: http.StatusBadRequest,
 		}, err
 	}
-
-	utils.Logger.Infow("parsed interaction",
-		"type", interaction.Type(),
-		"id", interaction.ID().String(),
-		"guild_id", interaction.GuildID().String(),
-		"user", interaction.User().Username,
-	)
 
 	// Handle the interaction
 	switch interaction.Type() {
