@@ -9,7 +9,7 @@ import (
 
 // roll returns a string of the result of a dice roll
 func roll(i discord.Interaction) (string, error) {
-	output, value, err := gamble.Roll(string(i.(discord.ApplicationCommandInteraction).Data.(discord.SlashCommandInteractionData).Options["dice"].Value))
+	output, value, err := gamble.Roll(i.(discord.ApplicationCommandInteraction).Data.(discord.SlashCommandInteractionData).String("dice"))
 	if err != nil {
 		return "", err
 	}
