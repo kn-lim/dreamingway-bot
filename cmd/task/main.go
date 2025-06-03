@@ -14,12 +14,22 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-func handler(ctx context.Context, interaction discord.Interaction) error {
+func handler(ctx context.Context, rawInteraction []byte) error {
 	// Initialize logger
 	var err error
 	utils.Logger, err = utils.NewLogger(true)
 	if err != nil {
 		log.Printf("couldn't initialize logger: %v", err)
+		return err
+	}
+
+	// Get discord interaction
+	interaction, err := discord.UnmarshalInteraction(rawInteraction)
+	if err != nil {
+		utils.Logger.Errorw("couldn't unmarshal interaction",
+			"error", err,
+			"interaction", string(rawInteraction),
+		)
 		return err
 	}
 
