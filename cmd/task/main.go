@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -14,7 +15,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-func handler(ctx context.Context, rawInteraction []byte) error {
+func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	// Initialize logger
 	var err error
 	utils.Logger, err = utils.NewLogger(true)
