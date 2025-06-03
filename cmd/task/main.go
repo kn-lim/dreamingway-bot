@@ -44,7 +44,7 @@ func handler(interaction discord.Interaction) error {
 		utils.Logger.Errorw("command does not exist",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 			"username", interaction.User().Username,
-			"guildID", interaction.GuildID().String(),
+			"guild_id", interaction.GuildID().String(),
 		)
 		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! Command `/`%s does not exist.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()))
 	}
@@ -55,7 +55,7 @@ func handler(interaction discord.Interaction) error {
 		utils.Logger.Infow("running command handler",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 			"username", interaction.User().Username,
-			"guildID", interaction.GuildID().String(),
+			"guild_id", interaction.GuildID().String(),
 		)
 
 		msg, err = cmd.Handler(interaction)
@@ -63,7 +63,7 @@ func handler(interaction discord.Interaction) error {
 			utils.Logger.Errorw("error running command handler",
 				"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 				"username", interaction.User().Username,
-				"guildID", interaction.GuildID().String(),
+				"guild_id", interaction.GuildID().String(),
 				"error", err,
 			)
 			return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err))
@@ -73,7 +73,7 @@ func handler(interaction discord.Interaction) error {
 		// 	utils.Logger.Infow("running option handler",
 		// 		"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 		// 		"username", interaction.User().Username,
-		// 		"guildID", interaction.GuildID().String(),
+		// 		"guild_id", interaction.GuildID().String(),
 		// 	)
 
 		// 	msg, err = cmd.Options[interaction.(discord.ApplicationCommandOption).OptionName()](interaction)
@@ -81,7 +81,7 @@ func handler(interaction discord.Interaction) error {
 		// 		utils.Logger.Errorw("error running option handler",
 		// 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 		// 			"username", interaction.User().Username,
-		// 			"guildID", interaction.GuildID().String(),
+		// 			"guild_id", interaction.GuildID().String(),
 		// 			"error", err,
 		// 		)
 		// 		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! /%s option handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err))
@@ -92,7 +92,7 @@ func handler(interaction discord.Interaction) error {
 		utils.Logger.Errorw("got empty message",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 			"username", interaction.User().Username,
-			"guildID", interaction.GuildID().String(),
+			"guild_id", interaction.GuildID().String(),
 		)
 		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! Got empty message for /%s.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()))
 	}

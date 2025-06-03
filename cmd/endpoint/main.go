@@ -81,7 +81,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		utils.Logger.Infow("received application command interaction",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
 			"user", interaction.User().Username,
-			"guildID", interaction.(discord.ApplicationCommandInteraction).Data.GuildID().String(),
+			"guild_id", interaction.GuildID().String(),
 		)
 
 		// Get deferred response
