@@ -7,14 +7,15 @@ import (
 	"os"
 
 	"github.com/disgoorg/snowflake/v2"
-	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
-	"github.com/kn-lim/dreamingway-bot/internal/dreamingway/commands"
-	"github.com/kn-lim/dreamingway-bot/internal/utils"
 	"github.com/knadh/koanf/parsers/json"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
 	"github.com/urfave/cli/v3"
+
+	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
+	"github.com/kn-lim/dreamingway-bot/internal/dreamingway/commands"
+	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
 var (
@@ -84,10 +85,6 @@ func main() {
 			if err := k.Unmarshal("", &cfg); err != nil {
 				return ctx, fmt.Errorf("failed to unmarshal config: %w", err)
 			}
-
-			// utils.Logger.Infow("config loaded from file",
-			// 	"config", cfg,
-			// )
 
 			return ctx, nil
 		},

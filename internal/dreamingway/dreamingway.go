@@ -18,7 +18,6 @@ const (
 )
 
 type Dreamingway interface {
-	// DeferredMessage() discordgo.InteractionResponse
 	SendDeferredMessage(appID, token, content string) error
 }
 
@@ -28,7 +27,6 @@ type DreamingwayBot struct {
 
 // NewDreamingway creates a new DreamingwayBot instance
 func NewDreamingway(token string) (*DreamingwayBot, error) {
-	// client, err := discordgo.New("Bot " + token)
 	client, err := disgo.New(token)
 	if err != nil {
 		if utils.Logger != nil {

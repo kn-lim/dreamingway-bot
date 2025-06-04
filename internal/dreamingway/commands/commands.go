@@ -9,7 +9,6 @@ type Command struct {
 	Command discord.ApplicationCommandCreate
 	Handler func(discord.Interaction) (string, error)
 	// TODO: Implement options for commands
-	// Options map[string]func(discord.Interaction) (string, error)
 }
 
 var (

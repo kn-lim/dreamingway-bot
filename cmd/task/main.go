@@ -49,7 +49,11 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 		utils.Logger.Errorw("couldn't get commands",
 			"error", err,
 		)
-		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), "**Error**! Could not get commands.")
+		return dreamingwayBot.SendDeferredMessage(
+			interaction.ApplicationID().String(),
+			interaction.Token(),
+			"**Error**! Could not get commands.",
+		)
 	}
 	cmd, ok := cmds[interaction.(discord.ApplicationCommandInteraction).Data.CommandName()]
 	if !ok {
@@ -58,7 +62,11 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
-		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! Command `/`%s does not exist.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()))
+		return dreamingwayBot.SendDeferredMessage(
+			interaction.ApplicationID().String(),
+			interaction.Token(),
+			fmt.Sprintf("**Error**! Command `/`%s does not exist.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()),
+		)
 	}
 
 	// Run command handler
@@ -78,26 +86,13 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 				"guild_id", interaction.GuildID().String(),
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err))
+			return dreamingwayBot.SendDeferredMessage(
+				interaction.ApplicationID().String(),
+				interaction.Token(),
+				fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err),
+			)
 		}
-		// TODO: Implement option handlers
-		// } else if cmd.Options[interaction.(discord.ApplicationCommandInteraction).Data.(discord.SlashCommandInteractionData).] != nil {
-		// 	utils.Logger.Infow("running option handler",
-		// 		"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
-		// 		"username", interaction.User().Username,
-		// 		"guild_id", interaction.GuildID().String(),
-		// 	)
-
-		// 	msg, err = cmd.Options[interaction.(discord.ApplicationCommandOption).OptionName()](interaction)
-		// 	if err != nil {
-		// 		utils.Logger.Errorw("error running option handler",
-		// 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
-		// 			"username", interaction.User().Username,
-		// 			"guild_id", interaction.GuildID().String(),
-		// 			"error", err,
-		// 		)
-		// 		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! /%s option handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err))
-		// 	}
+		// TODO: Implement options for commands
 	}
 
 	if msg == "" {
@@ -106,10 +101,18 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
-		return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), fmt.Sprintf("**Error**! Got empty message for /%s.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()))
+		return dreamingwayBot.SendDeferredMessage(
+			interaction.ApplicationID().String(),
+			interaction.Token(),
+			fmt.Sprintf("**Error**! Got empty message for /%s.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()),
+		)
 	}
 
-	return dreamingwayBot.SendDeferredMessage(interaction.ApplicationID().String(), interaction.Token(), msg)
+	return dreamingwayBot.SendDeferredMessage(
+		interaction.ApplicationID().String(),
+		interaction.Token(),
+		msg,
+	)
 }
 
 func main() {
