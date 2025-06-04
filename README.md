@@ -53,15 +53,15 @@ Zip the bootstrap binaries and upload it to the Lambda functions.
 
 ```
 NAME:
-   dreamingway - Sync Discord commands
+   dreamingway - sync discord commands
 
 USAGE:
    dreamingway [global options]
 
 GLOBAL OPTIONS:
-   --verbose, -v               Enable verbose logging (default: false)
-   --config string, -c string  Path to the configuration file (default: "config.json")
-   --config-string string      Configuration as a JSON string
+   --verbose, -v               enable verbose logging (default: false)
+   --config string, -c string  path to the configuration file (default: "config.json")
+   --config-string string      configuration as a json string
    --help, -h                  show help
 ```
 

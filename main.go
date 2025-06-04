@@ -37,23 +37,23 @@ type Config struct {
 func main() {
 	cmd := &cli.Command{
 		Name:  "dreamingway",
-		Usage: "Sync Discord commands",
+		Usage: "sync discord commands",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
-				Usage:   "Enable verbose logging",
+				Usage:   "enable verbose logging",
 				Value:   false,
 			},
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
-				Usage:   "Path to the configuration file",
+				Usage:   "path to the configuration file",
 				Value:   "config.json",
 			},
 			&cli.StringFlag{
 				Name:  "config-string",
-				Usage: "Configuration as a JSON string",
+				Usage: "configuration as a json string",
 				Value: "",
 			},
 		},
