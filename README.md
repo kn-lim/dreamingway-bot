@@ -20,7 +20,7 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 - [aws-lambda-go](https://github.com/aws/aws-lambda-go/)
 - [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2)
 - [chattingway](https://github.com/kn-lim/chattingway)
-- [discordgo](https://github.com/bwmarrin/discordgo/)
+- [disgo](https://github.com/disgoorg/disgo)
 - [koanf](https://github.com/knadh/koanf)
 - [mergo](https://github.com/darccio/mergo)
 - [urfave/cli](https://github.com/urfave/cli)
