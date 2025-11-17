@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "github>kn-lim/homelab//templates/renovate/homelab/default"
+  ]
+}
