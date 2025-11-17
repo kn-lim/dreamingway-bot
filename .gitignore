@@ -26,3 +26,4 @@ go.work.sum
 
 config.json
 binary/
+*.code-workspace
