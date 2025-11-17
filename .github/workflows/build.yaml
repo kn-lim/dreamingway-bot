@@ -36,7 +36,7 @@ jobs:
         zip task.zip bootstrap
 
     - name: Upload endpoint binary to Lambda
-      uses: appleboy/lambda-action@v0.2.0
+      uses: appleboy/lambda-action@bdbe5c99e38d855e0fa2ae1aba355da64c860a57 # v0.2.0
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -45,7 +45,7 @@ jobs:
         zip_file: endpoint.zip
 
     - name: Upload task binary to Lambda
-      uses: appleboy/lambda-action@v0.2.0
+      uses: appleboy/lambda-action@bdbe5c99e38d855e0fa2ae1aba355da64c860a57 # v0.2.0
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
