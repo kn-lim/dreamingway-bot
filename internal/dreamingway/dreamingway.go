@@ -78,8 +78,14 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 				"error", err,
 			)
 		}
+
+		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			utils.Logger.Warnw("failed to close response body", "error", closeErr)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		var result map[string]any
