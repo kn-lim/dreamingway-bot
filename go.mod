@@ -1,6 +1,6 @@
 module github.com/kn-lim/dreamingway-bot
 
-go 1.24.3
+go 1.25.4
 
 require (
 	dario.cat/mergo v1.0.2
