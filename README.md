@@ -87,6 +87,7 @@ GLOBAL OPTIONS:
 | `PZ_HOST_INSTANCE_ID` | AWS Instance ID of the Project Zomboid Host |
 | `PZ_HOST_REGION` | AWS Instance ID of the Project Zomboid Host |
 | `PZ_RCON_PASSWORD` | RCON Password of the Project Zomboid server |
+| `PZ_RCON_PORT` | RCON Port of the Project Zomboid server |
 
 ## AWS Setup
 
