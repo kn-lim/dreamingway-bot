@@ -59,6 +59,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	if !ok {
 		utils.Logger.Errorw("command does not exist",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+			"sub_command", interaction.(discord.ApplicationCommandInteraction).SlashCommandInteractionData().SubCommandName,
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
@@ -74,6 +75,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	if cmd.Handler != nil {
 		utils.Logger.Infow("running command handler",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+			"sub_command", interaction.(discord.ApplicationCommandInteraction).SlashCommandInteractionData().SubCommandName,
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
@@ -82,6 +84,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 		if err != nil {
 			utils.Logger.Errorw("error running command handler",
 				"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+				"sub_command", interaction.(discord.ApplicationCommandInteraction).SlashCommandInteractionData().SubCommandName,
 				"username", interaction.User().Username,
 				"guild_id", interaction.GuildID().String(),
 				"error", err,
@@ -97,6 +100,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	if msg == "" {
 		utils.Logger.Errorw("got empty message",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+			"sub_command", interaction.(discord.ApplicationCommandInteraction).SlashCommandInteractionData().SubCommandName,
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)

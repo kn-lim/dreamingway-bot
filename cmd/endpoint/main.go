@@ -80,6 +80,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	case discord.InteractionTypeApplicationCommand:
 		utils.Logger.Infow("received application command interaction",
 			"command", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(),
+			"sub_command", interaction.(discord.ApplicationCommandInteraction).SlashCommandInteractionData().SubCommandName,
 			"user", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
