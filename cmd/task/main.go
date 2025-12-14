@@ -92,7 +92,6 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 				fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err),
 			)
 		}
-		// TODO: Implement options for commands
 	}
 
 	if msg == "" {
