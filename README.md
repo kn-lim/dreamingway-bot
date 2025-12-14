@@ -84,7 +84,9 @@ GLOBAL OPTIONS:
 | `DISCORD_API_VERSION` | Discord API Version |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 | `PZ_HOST` | Project Zomboid Host IP/URL |
-| `PZ_RCON_PASSWORD` | Project Zomboid Password for RCON |
+| `PZ_HOST_INSTANCE_ID` | AWS Instance ID of the Project Zomboid Host |
+| `PZ_HOST_REGION` | AWS Instance ID of the Project Zomboid Host |
+| `PZ_RCON_PASSWORD` | RCON Password of the Project Zomboid server |
 
 ## AWS Setup
 

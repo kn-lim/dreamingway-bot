@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -32,13 +33,13 @@ func pz(i discord.Interaction) (string, error) {
 			return fmt.Sprintf("Successfully sent the RCON command and received the output `%s`", output), nil
 		}
 	case "start": // /pz start
-		if err := projectzomboid.Start(); err != nil {
+		if err := projectzomboid.Start(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION"), os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PASSWORD")); err != nil {
 			return "", err
 		}
 
 		return constants.PZ_STATUS_ONLINE, nil
 	case "status": // /pz status
-		status, err := projectzomboid.Status()
+		status, err := projectzomboid.Status(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PASSWORD"))
 		if err != nil {
 			return "", err
 		}
@@ -49,7 +50,7 @@ func pz(i discord.Interaction) (string, error) {
 			return constants.PZ_STATUS_OFFLINE, nil
 		}
 	case "stop": // /pz stop
-		if err := projectzomboid.Stop(); err != nil {
+		if err := projectzomboid.Stop(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION"), os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PASSWORD")); err != nil {
 			return "", err
 		}
 
