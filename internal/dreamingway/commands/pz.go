@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/kn-lim/chattingway/projectzomboid"
@@ -32,7 +33,7 @@ func pz(i discord.Interaction) (string, error) {
 	is_admin := false
 	for _, role := range roles {
 		if role.Name == os.Getenv("PZ_DISCORD_ADMIN_ROLE") {
-			is_admin = true
+			is_admin = slices.Contains(member.RoleIDs, role.ID)
 			break
 		}
 	}
