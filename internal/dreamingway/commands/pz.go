@@ -42,7 +42,7 @@ func pz(i discord.Interaction) (string, error) {
 	subCommand := i.(discord.ApplicationCommandInteraction).SlashCommandInteractionData()
 	switch *subCommand.SubCommandName {
 	case "rcon": // /pz rcon <command>
-		if is_admin {
+		if !is_admin {
 			return constants.UNAUTHORIZED, nil
 		}
 
@@ -57,7 +57,7 @@ func pz(i discord.Interaction) (string, error) {
 			return fmt.Sprintf("Successfully sent the RCON command and received the output `%s`", output), nil
 		}
 	case "start": // /pz start
-		if is_admin {
+		if !is_admin {
 			return constants.UNAUTHORIZED, nil
 		}
 
@@ -78,7 +78,7 @@ func pz(i discord.Interaction) (string, error) {
 			return constants.PZ_STATUS_OFFLINE, nil
 		}
 	case "stop": // /pz stop
-		if is_admin {
+		if !is_admin {
 			return constants.UNAUTHORIZED, nil
 		}
 
