@@ -72,15 +72,17 @@ GLOBAL OPTIONS:
 | Name | Description |
 | - | - |
 | `DEBUG` | Enable debug mode |
-| `TASK_FUNCTION_NAME` | Name of the Task Lambda Function |
 | `DISCORD_BOT_APPLICATION_ID` | Discord Bot Application ID |
 | `DISCORD_BOT_PUBLIC_KEY` | Discord Bot Public Key |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
+| `TASK_FUNCTION_NAME` | Name of the Task Lambda Function |
 
 ### Task Lambda Function
 
 | Name | Description |
 | - | - |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API Token |
+| `CLOUDFLARE_ZONE_ID` | Cloudflare Zone ID |
 | `DISCORD_API_VERSION` | Discord API Version |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
 | `PZ_DISCORD_ADMIN_ROLE` | Discord Admin Role for the Project Zomboid |

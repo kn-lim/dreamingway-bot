@@ -61,7 +61,17 @@ func pz(i discord.Interaction) (string, error) {
 			return constants.UNAUTHORIZED, nil
 		}
 
-		if err := projectzomboid.Start(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION"), os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD")); err != nil {
+		if err := projectzomboid.Start(
+			context.TODO(),
+			os.Getenv("PZ_HOST_INSTANCE_ID"),
+			os.Getenv("PZ_HOST_REGION"),
+			os.Getenv("PZ_HOST"),
+			os.Getenv("PZ_RCON_PORT"),
+			os.Getenv("PZ_RCON_PASSWORD"),
+			os.Getenv("CLOUDFLARE_API_TOKEN"),
+			os.Getenv("CLOUDFLARE_ZONE_ID"),
+			os.Getenv("PZ_HOST"),
+		); err != nil {
 			return "", err
 		}
 
@@ -82,7 +92,16 @@ func pz(i discord.Interaction) (string, error) {
 			return constants.UNAUTHORIZED, nil
 		}
 
-		if err := projectzomboid.Stop(context.TODO(), os.Getenv("PZ_HOST_INSTANCE_ID"), os.Getenv("PZ_HOST_REGION"), os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD")); err != nil {
+		if err := projectzomboid.Stop(context.TODO(),
+			os.Getenv("PZ_HOST_INSTANCE_ID"),
+			os.Getenv("PZ_HOST_REGION"),
+			os.Getenv("PZ_HOST"),
+			os.Getenv("PZ_RCON_PORT"),
+			os.Getenv("PZ_RCON_PASSWORD"),
+			os.Getenv("CLOUDFLARE_API_TOKEN"),
+			os.Getenv("CLOUDFLARE_ZONE_ID"),
+			os.Getenv("PZ_HOST"),
+		); err != nil {
 			return "", err
 		}
 
