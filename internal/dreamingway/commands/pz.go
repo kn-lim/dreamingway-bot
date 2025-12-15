@@ -54,7 +54,7 @@ func pz(i discord.Interaction) (string, error) {
 		if output == "" {
 			return "Successfully sent the RCON command", nil
 		} else {
-			return fmt.Sprintf("Successfully sent the RCON command and received the output `%s`", output), nil
+			return fmt.Sprintf("Successfully sent the RCON command and received the output: `%s`", output), nil
 		}
 	case "start": // /pz start
 		if !is_admin {

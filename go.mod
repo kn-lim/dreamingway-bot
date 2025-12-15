@@ -10,7 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.87.0
 	github.com/disgoorg/disgo v0.18.16
 	github.com/disgoorg/snowflake/v2 v2.0.3
-	github.com/kn-lim/chattingway v1.4.8-0.20251214224931-07e7504de4a4
+	github.com/kn-lim/chattingway v1.4.8-0.20251215025041-1f0d0dc44525
 	github.com/knadh/koanf/parsers/json v1.0.0
 	github.com/knadh/koanf/providers/file v1.2.0
 	github.com/knadh/koanf/providers/rawbytes v1.0.0
@@ -35,6 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.5 // indirect
 	github.com/aws/smithy-go v1.24.0 // indirect
+	github.com/cloudflare/cloudflare-go/v6 v6.4.0 // indirect
 	github.com/disgoorg/json v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
@@ -44,6 +45,10 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad // indirect
+	github.com/tidwall/gjson v1.14.4 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/sjson v1.2.5 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
