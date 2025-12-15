@@ -12,11 +12,6 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-const (
-	// Discord Webhook Base URL
-	WEBHOOK_BASE_URL = "https://discord.com/api"
-)
-
 type Dreamingway interface {
 	SendDeferredMessage(appID, token, content string) error
 }
@@ -56,7 +51,7 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 		return err
 	}
 
-	url := fmt.Sprintf("%v/v%v/webhooks/%v/%v", WEBHOOK_BASE_URL, os.Getenv("DISCORD_API_VERSION"), appID, token)
+	url := fmt.Sprintf("%s/v%s/webhooks/%s/%s", WEBHOOK_BASE_URL, os.Getenv("DISCORD_API_VERSION"), appID, token)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	if err != nil {
@@ -81,11 +76,7 @@ func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error
 
 		return err
 	}
-	defer func() {
-		if closeErr := resp.Body.Close(); closeErr != nil {
-			utils.Logger.Warnw("failed to close response body", "error", closeErr)
-		}
-	}()
+	defer resp.Body.Close() //nolint:errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		var result map[string]any

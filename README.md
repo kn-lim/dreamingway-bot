@@ -83,6 +83,7 @@ GLOBAL OPTIONS:
 | - | - |
 | `DISCORD_API_VERSION` | Discord API Version |
 | `DISCORD_BOT_TOKEN` | Discord Bot Token |
+| `PZ_DISCORD_ADMIN_ROLE` | Discord Admin Role for the Project Zomboid |
 | `PZ_HOST` | Project Zomboid Host IP/URL |
 | `PZ_HOST_INSTANCE_ID` | AWS Instance ID of the Project Zomboid Host |
 | `PZ_HOST_REGION` | AWS Instance ID of the Project Zomboid Host |
