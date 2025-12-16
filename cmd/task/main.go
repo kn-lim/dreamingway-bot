@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/disgoorg/disgo/discord"
@@ -34,22 +33,13 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 		return err
 	}
 
-	// Create a new Discord session
-	dreamingwayBot, err := dreamingway.NewDreamingway(os.Getenv("DISCORD_BOT_TOKEN"))
-	if err != nil {
-		utils.Logger.Errorw("couldn't create a new Discord session",
-			"error", err,
-		)
-		return err
-	}
-
 	// Get command
 	cmds, err := commands.GetAllCommands()
 	if err != nil {
 		utils.Logger.Errorw("couldn't get commands",
 			"error", err,
 		)
-		return dreamingwayBot.SendDeferredMessage(
+		return dreamingway.SendDeferredMessage(
 			interaction.ApplicationID().String(),
 			interaction.Token(),
 			"**Error**! Could not get commands.",
@@ -63,7 +53,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
-		return dreamingwayBot.SendDeferredMessage(
+		return dreamingway.SendDeferredMessage(
 			interaction.ApplicationID().String(),
 			interaction.Token(),
 			fmt.Sprintf("**Error**! Command `/`%s does not exist.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()),
@@ -89,7 +79,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 				"guild_id", interaction.GuildID().String(),
 				"error", err,
 			)
-			return dreamingwayBot.SendDeferredMessage(
+			return dreamingway.SendDeferredMessage(
 				interaction.ApplicationID().String(),
 				interaction.Token(),
 				fmt.Sprintf("**Error**! /%s handler failed: `%s`", interaction.(discord.ApplicationCommandInteraction).Data.CommandName(), err),
@@ -104,14 +94,14 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 			"username", interaction.User().Username,
 			"guild_id", interaction.GuildID().String(),
 		)
-		return dreamingwayBot.SendDeferredMessage(
+		return dreamingway.SendDeferredMessage(
 			interaction.ApplicationID().String(),
 			interaction.Token(),
 			fmt.Sprintf("**Error**! Got empty message for /%s.", interaction.(discord.ApplicationCommandInteraction).Data.CommandName()),
 		)
 	}
 
-	return dreamingwayBot.SendDeferredMessage(
+	return dreamingway.SendDeferredMessage(
 		interaction.ApplicationID().String(),
 		interaction.Token(),
 		msg,

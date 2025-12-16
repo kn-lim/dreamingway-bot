@@ -12,9 +12,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-type Dreamingway interface {
-	SendDeferredMessage(appID, token, content string) error
-}
+type Dreamingway interface{}
 
 type DreamingwayBot struct {
 	Client bot.Client
@@ -38,7 +36,7 @@ func NewDreamingway(token string) (*DreamingwayBot, error) {
 }
 
 // SendDeferredMessage sends a deferred message to a Discord channel
-func (d *DreamingwayBot) SendDeferredMessage(appID, token, content string) error {
+func SendDeferredMessage(appID, token, content string) error {
 	payload, err := json.Marshal(map[string]string{
 		"content": content,
 	})

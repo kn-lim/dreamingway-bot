@@ -61,6 +61,10 @@ func pz(i discord.Interaction) (string, error) {
 			return constants.UNAUTHORIZED, nil
 		}
 
+		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZ_SERVER_START); err != nil {
+			return "", err
+		}
+
 		if err := projectzomboid.Start(
 			context.TODO(),
 			os.Getenv("PZ_HOST_INSTANCE_ID"),
@@ -77,12 +81,7 @@ func pz(i discord.Interaction) (string, error) {
 
 		return constants.PZ_STATUS_ONLINE, nil
 	case "status": // /pz status
-		status, err := projectzomboid.Status(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD"))
-		if err != nil {
-			return "", err
-		}
-
-		if status {
+		if status, _ := projectzomboid.Status(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD")); status {
 			return constants.PZ_STATUS_ONLINE, nil
 		} else {
 			return constants.PZ_STATUS_OFFLINE, nil
@@ -90,6 +89,10 @@ func pz(i discord.Interaction) (string, error) {
 	case "stop": // /pz stop
 		if !is_admin {
 			return constants.UNAUTHORIZED, nil
+		}
+
+		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZ_SERVER_STOP); err != nil {
+			return "", err
 		}
 
 		if err := projectzomboid.Stop(context.TODO(),
