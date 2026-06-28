@@ -43,14 +43,20 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Upload endpoint binary to Lambda
+    - name: Upload endpoint binary to S3 and Lambda
       run: |
+        aws s3 cp endpoint.zip \
+          s3://${{ vars.AWS_S3_BUCKET }}/lambda/dreamingway-bot/endpoint/bootstrap.zip
         aws lambda update-function-code \
           --function-name ${{ vars.AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
-          --zip-file fileb://endpoint.zip
+          --s3-bucket ${{ vars.AWS_S3_BUCKET }} \
+          --s3-key lambda/dreamingway-bot/endpoint/bootstrap.zip
 
-    - name: Upload task binary to Lambda
+    - name: Upload task binary to S3 and Lambda
       run: |
+        aws s3 cp task.zip \
+          s3://${{ vars.AWS_S3_BUCKET }}/lambda/dreamingway-bot/task/bootstrap.zip
         aws lambda update-function-code \
           --function-name ${{ vars.AWS_LAMBDA_TASK_FUNCTION_NAME }} \
-          --zip-file fileb://task.zip
+          --s3-bucket ${{ vars.AWS_S3_BUCKET }} \
+          --s3-key lambda/dreamingway-bot/task/bootstrap.zip
