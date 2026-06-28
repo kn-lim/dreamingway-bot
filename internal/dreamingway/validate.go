@@ -10,7 +10,7 @@ import (
 )
 
 // ValidateRequest validates a Discord interaction request
-func ValidateRequest(request events.APIGatewayProxyRequest, publicKey string) error {
+func ValidateRequest(request events.APIGatewayV2HTTPRequest, publicKey string) error {
 	publicKeyBytes, err := hex.DecodeString(publicKey)
 	if err != nil {
 		return err

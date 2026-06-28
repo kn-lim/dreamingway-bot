@@ -20,20 +20,20 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handler(ctx context.Context, request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	// Initialize logger
 	var err error
 	utils.Logger, err = utils.NewLogger(true)
 	if err != nil {
 		log.Printf("couldn't initialize logger: %v", err)
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusInternalServerError,
 		}, err
 	}
 
 	// Validate the request
 	if err := dreamingway.ValidateRequest(request, os.Getenv("DISCORD_BOT_PUBLIC_KEY")); err != nil {
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusUnauthorized,
 		}, err
 	}
@@ -43,7 +43,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	if request.IsBase64Encoded {
 		body_bytes, err := base64.StdEncoding.DecodeString(request.Body)
 		if err != nil {
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusBadRequest,
 			}, err
 		}
@@ -59,7 +59,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			"error", err,
 			"body", string(body),
 		)
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusBadRequest,
 		}, err
 	}
@@ -69,7 +69,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	// Ping interaction
 	case discord.InteractionTypePing:
 		utils.Logger.Info("received ping interaction")
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusOK,
 			Headers: map[string]string{
 				"Content-Type": "application/json",
@@ -91,7 +91,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			utils.Logger.Errorw("failed to marshal deferred response",
 				"error", err,
 			)
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
@@ -102,7 +102,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			utils.Logger.Errorw("failed to load default config",
 				"error", err,
 			)
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
@@ -112,7 +112,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			utils.Logger.Errorw("failed to marshal interaction",
 				"error", err,
 			)
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
@@ -125,13 +125,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			utils.Logger.Errorw("failed to invoke task function",
 				"error", err,
 			)
-			return events.APIGatewayProxyResponse{
+			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
 
 		// Return deferred response
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusOK,
 			Headers: map[string]string{
 				"Content-Type": "application/json",
@@ -144,7 +144,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 			"type", interaction.Type,
 		)
 
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: http.StatusBadRequest,
 		}, nil
 	}
