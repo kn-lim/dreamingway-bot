@@ -46,17 +46,17 @@ jobs:
     - name: Upload endpoint binary to S3 and Lambda
       run: |
         aws s3 cp endpoint.zip \
-          s3://${{ vars.AWS_S3_BUCKET }}/lambda/dreamingway-bot/endpoint/bootstrap.zip
+          s3://${{ secrets.AWS_S3_BUCKET }}/lambda/dreamingway-bot/endpoint/bootstrap.zip
         aws lambda update-function-code \
           --function-name ${{ vars.AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
-          --s3-bucket ${{ vars.AWS_S3_BUCKET }} \
+          --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
           --s3-key lambda/dreamingway-bot/endpoint/bootstrap.zip
 
     - name: Upload task binary to S3 and Lambda
       run: |
         aws s3 cp task.zip \
-          s3://${{ vars.AWS_S3_BUCKET }}/lambda/dreamingway-bot/task/bootstrap.zip
+          s3://${{ secrets.AWS_S3_BUCKET }}/lambda/dreamingway-bot/task/bootstrap.zip
         aws lambda update-function-code \
           --function-name ${{ vars.AWS_LAMBDA_TASK_FUNCTION_NAME }} \
-          --s3-bucket ${{ vars.AWS_S3_BUCKET }} \
+          --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
           --s3-key lambda/dreamingway-bot/task/bootstrap.zip
