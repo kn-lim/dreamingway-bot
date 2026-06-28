@@ -101,7 +101,7 @@ func main() {
 			}
 
 			// Sync global commands
-			if err := commands.SyncGlobalCommands(d.Client.Rest(), applicationID, commands.GlobalCommands); err != nil {
+			if err := commands.SyncGlobalCommands(d.Client.Rest, applicationID, commands.GlobalCommands); err != nil {
 				return cli.Exit(fmt.Sprintf("failed to sync global commands: %v", err), 1)
 			}
 
@@ -128,7 +128,7 @@ func main() {
 						}
 					}
 				}
-				if err := commands.SyncGuildCommands(d.Client.Rest(), applicationID, snowflakeID, cmds); err != nil {
+				if err := commands.SyncGuildCommands(d.Client.Rest, applicationID, snowflakeID, cmds); err != nil {
 					return cli.Exit(fmt.Sprintf("failed to sync guild commands: %v", err), 1)
 				}
 			}

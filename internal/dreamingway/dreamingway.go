@@ -15,7 +15,7 @@ import (
 type Dreamingway interface{}
 
 type DreamingwayBot struct {
-	Client bot.Client
+	Client *bot.Client
 }
 
 // NewDreamingway creates a new DreamingwayBot instance

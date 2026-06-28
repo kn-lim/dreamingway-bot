@@ -9,7 +9,7 @@
 ![Go](https://img.shields.io/github/go-mod/go-version/kn-lim/dreamingway-bot)
 ![GitHub Workflow Status - Build](https://img.shields.io/github/actions/workflow/status/kn-lim/dreamingway-bot/build.yaml)
 ![GitHub Workflow Status - Tests](https://img.shields.io/github/actions/workflow/status/kn-lim/dreamingway-bot/test.yaml?label=tests)
-[![Coverage Status](https://coveralls.io/repos/github/kn-lim/dreamingway-bot/badge.svg?branch=main)](https://coveralls.io/github/kn-lim/dreamingway-bot?branch=main)
+[![codecov](https://codecov.io/gh/kn-lim/dreamingway-bot/branch/main/graph/badge.svg)](https://codecov.io/gh/kn-lim/dreamingway-bot)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/dreamingway-bot)](https://goreportcard.com/report/github.com/kn-lim/dreamingway-bot)
 ![License](https://img.shields.io/github/license/kn-lim/dreamingway-bot)
 
@@ -40,8 +40,8 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 
 From the project home directory:
 
-- **Endpoint Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
-- **Task Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
+- **Endpoint Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
+- **Task Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
 
 Zip the bootstrap binaries and upload it to the Lambda functions.
 
@@ -98,7 +98,7 @@ To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https:
 
 1. Create the **endpoint** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
-    - For the `Architecture`, select `x86_64`.
+    - For the `Architecture`, select `arm64`.
 2. Add an API Gateway triger to the **endpoint** Lambda function.
     - Use the following settings:
       - **Intent**: Create a new API
@@ -106,7 +106,7 @@ To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https:
       - **Security**: Open
 3. Create the **task** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
-    - For the `Architecture`, select `x86_64`.
+    - For the `Architecture`, select `arm64`.
 4. Build the **endpoint** and **task** binaries.
 5. Archive the `bootstrap` binaries in .zip files and upload it to the Lambda functions.
 6. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
