@@ -1,5 +1,5 @@
 {
   "extends": [
-    "github>kn-lim/homelab//templates/renovate/homelab/default"
-  ]
+    "github>kn-lim/homelab//.renovaterc.json5"
+  ],
 }
