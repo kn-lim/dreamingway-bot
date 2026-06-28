@@ -94,7 +94,11 @@ GLOBAL OPTIONS:
 
 ## AWS Setup
 
-To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https://github.com/kn-lim/chattingway-terraform/).
+### Terraform
+
+To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https://github.com/kn-lim/terraform-aws-chattingway/).
+
+### Manual
 
 1. Create the **endpoint** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
@@ -102,13 +106,13 @@ To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https:
 2. Add an API Gateway triger to the **endpoint** Lambda function.
     - Use the following settings:
       - **Intent**: Create a new API
-      - **API type**: REST API
+      - **API type**: HTTP API
       - **Security**: Open
 3. Create the **task** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `arm64`.
-4. Build the **endpoint** and **task** binaries.
-5. Archive the `bootstrap` binaries in .zip files and upload it to the Lambda functions.
+4. Build the **endpoint** and **task** binaries as `bootstrap`.
+5. Archive the `bootstrap` binaries in `bootstrap.zip` files and upload it to the Lambda functions.
 6. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
 7. Change the `Timeout` of the **task** Lambda function to a value greater than 3 seconds.
     - The `Timeout` of the **endpoint** Lambda function can stay as 3 seconds to follow Discord's requirements.
