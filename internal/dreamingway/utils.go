@@ -1,6 +1,7 @@
 package dreamingway
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,16 +12,16 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-// GetDeferredMessageResponse returns a InteractionResponseTypeDeferredCreateMessage interaction response
-func GetDeferredMessageResponse() discord.InteractionResponse {
+// DeferredMessageResponse returns an InteractionResponseTypeDeferredCreateMessage interaction response.
+func DeferredMessageResponse() discord.InteractionResponse {
 	return discord.InteractionResponse{
 		Type: discord.InteractionResponseTypeDeferredCreateMessage,
 	}
 }
 
-// GetAllGuildRoles returns all roles present in a given Discord guild
-func GetAllGuildRoles(guildID *snowflake.ID, apiVersion, token string) ([]discord.Role, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/v%s/guilds/%s/roles", WEBHOOK_BASE_URL, apiVersion, guildID.String()), nil)
+// FetchGuildRoles returns all roles present in a given Discord guild.
+func FetchGuildRoles(guildID *snowflake.ID, apiVersion, token string) ([]discord.Role, error) {
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, fmt.Sprintf("%s/v%s/guilds/%s/roles", webhookBaseURL, apiVersion, guildID.String()), nil)
 	if err != nil {
 		return nil, err
 	}

@@ -86,7 +86,7 @@ func handler(ctx context.Context, request events.APIGatewayV2HTTPRequest) (event
 		)
 
 		// Get deferred response
-		deferredResponse, err := json.Marshal(dreamingway.GetDeferredMessageResponse())
+		deferredResponse, err := json.Marshal(dreamingway.DeferredMessageResponse())
 		if err != nil {
 			utils.Logger.Errorw("failed to marshal deferred response",
 				"error", err,

@@ -25,7 +25,7 @@ func pz(i discord.Interaction) (string, error) {
 	if member == nil {
 		return "", errors.New("command must be sent from a server")
 	}
-	roles, err := dreamingway.GetAllGuildRoles(i.GuildID(), os.Getenv("DISCORD_API_VERSION"), os.Getenv("DISCORD_BOT_TOKEN"))
+	roles, err := dreamingway.FetchGuildRoles(i.GuildID(), os.Getenv("DISCORD_API_VERSION"), os.Getenv("DISCORD_BOT_TOKEN"))
 	if err != nil {
 		return "", err
 	}

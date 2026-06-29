@@ -2,6 +2,7 @@ package dreamingway
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,8 +13,7 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/utils"
 )
 
-type Dreamingway interface{}
-
+// DreamingwayBot wraps the Discord bot client.
 type DreamingwayBot struct {
 	Client *bot.Client
 }
@@ -49,9 +49,9 @@ func SendDeferredMessage(appID, token, content string) error {
 		return err
 	}
 
-	url := fmt.Sprintf("%s/v%s/webhooks/%s/%s", WEBHOOK_BASE_URL, os.Getenv("DISCORD_API_VERSION"), appID, token)
+	url := fmt.Sprintf("%s/v%s/webhooks/%s/%s", webhookBaseURL, os.Getenv("DISCORD_API_VERSION"), appID, token)
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, url, bytes.NewBuffer(payload))
 	if err != nil {
 		if utils.Logger != nil {
 			utils.Logger.Errorw("failed to create http POST request",
