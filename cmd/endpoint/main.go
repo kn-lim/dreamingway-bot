@@ -41,13 +41,13 @@ func handler(ctx context.Context, request events.APIGatewayV2HTTPRequest) (event
 	// Parse the request body
 	var body []byte
 	if request.IsBase64Encoded {
-		body_bytes, err := base64.StdEncoding.DecodeString(request.Body)
+		bodyBytes, err := base64.StdEncoding.DecodeString(request.Body)
 		if err != nil {
 			return events.APIGatewayV2HTTPResponse{
 				StatusCode: http.StatusBadRequest,
 			}, err
 		}
-		body = body_bytes
+		body = bodyBytes
 	} else {
 		body = []byte(request.Body)
 	}
