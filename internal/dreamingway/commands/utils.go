@@ -11,14 +11,14 @@ import (
 // SyncGlobalCommands syncs the global commands with the provided commands
 func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands map[string]Command) error {
 	// Get current global commands
-	curr_cmds, err := client.GetGlobalCommands(applicationID, false)
+	currentCmds, err := client.GetGlobalCommands(applicationID, false)
 	if err != nil {
 		return err
 	}
 
 	// Delete all global commands
 	var deletedCmds []string
-	for _, cmd := range curr_cmds {
+	for _, cmd := range currentCmds {
 		if err := client.DeleteGlobalCommand(applicationID, cmd.ID()); err != nil {
 			utils.Logger.Errorw("failed to delete global command",
 				"command_id", cmd.ID(),
@@ -63,14 +63,14 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 // SyncGuildCommands syncs the guild commands with the provided commands
 func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, commands map[string]Command) error {
 	// Get current guild commands
-	curr_cmds, err := client.GetGuildCommands(applicationID, guildID, false)
+	currentCmds, err := client.GetGuildCommands(applicationID, guildID, false)
 	if err != nil {
 		return err
 	}
 
 	// Delete all guild commands
 	var deletedCmds []string
-	for _, cmd := range curr_cmds {
+	for _, cmd := range currentCmds {
 		if err := client.DeleteGuildCommand(applicationID, guildID, cmd.ID()); err != nil {
 			utils.Logger.Errorw("failed to delete guild command",
 				"command_id", cmd.ID(),

@@ -5,12 +5,14 @@ import (
 	"github.com/disgoorg/disgo/discord"
 )
 
+// Command pairs a Discord application command with its handler.
 type Command struct {
 	Command discord.ApplicationCommandCreate
 	Handler func(discord.Interaction) (string, error)
 }
 
 var (
+	// GlobalCommands are the commands registered for every guild.
 	GlobalCommands = map[string]Command{
 		// healthcheck
 		"ping": {
@@ -79,11 +81,12 @@ var (
 		},
 	}
 
+	// Commands are guild-specific commands.
 	Commands = map[string]Command{}
 )
 
-// GetAllCommands returns a slice of all commands, both global and non-global
-func GetAllCommands() (map[string]Command, error) {
+// AllCommands returns a map of all commands, both global and guild-specific.
+func AllCommands() (map[string]Command, error) {
 	allCommands := make(map[string]Command)
 	if err := mergo.Merge(&allCommands, GlobalCommands); err != nil {
 		return nil, err

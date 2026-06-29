@@ -34,7 +34,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	}
 
 	// Get command
-	cmds, err := commands.GetAllCommands()
+	cmds, err := commands.AllCommands()
 	if err != nil {
 		utils.Logger.Errorw("couldn't get commands",
 			"error", err,

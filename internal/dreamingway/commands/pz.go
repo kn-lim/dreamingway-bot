@@ -14,10 +14,6 @@ import (
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
 )
 
-const (
-	PLAYER_COUNT_REGEX = `Players connected \((\d+)\):`
-)
-
 // Project Zomboid related commands
 func pz(i discord.Interaction) (string, error) {
 	// Validate user has permission to run admin commands
@@ -30,10 +26,10 @@ func pz(i discord.Interaction) (string, error) {
 		return "", err
 	}
 
-	is_admin := false
+	isAdmin := false
 	for _, role := range roles {
 		if role.Name == os.Getenv("PZ_DISCORD_ADMIN_ROLE") {
-			is_admin = slices.Contains(member.RoleIDs, role.ID)
+			isAdmin = slices.Contains(member.RoleIDs, role.ID)
 			break
 		}
 	}
@@ -42,7 +38,7 @@ func pz(i discord.Interaction) (string, error) {
 	subCommand := i.(discord.ApplicationCommandInteraction).SlashCommandInteractionData()
 	switch *subCommand.SubCommandName {
 	case "rcon": // /pz rcon <command>
-		if !is_admin {
+		if !isAdmin {
 			return constants.Unauthorized, nil
 		}
 
@@ -53,11 +49,11 @@ func pz(i discord.Interaction) (string, error) {
 
 		if output == "" {
 			return "Successfully sent the RCON command", nil
-		} else {
-			return fmt.Sprintf("Successfully sent the RCON command and received the output: `%s`", output), nil
 		}
+
+		return fmt.Sprintf("Successfully sent the RCON command and received the output: `%s`", output), nil
 	case "start": // /pz start
-		if !is_admin {
+		if !isAdmin {
 			return constants.Unauthorized, nil
 		}
 
@@ -83,11 +79,11 @@ func pz(i discord.Interaction) (string, error) {
 	case "status": // /pz status
 		if status, _ := projectzomboid.Status(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD")); status {
 			return constants.PZStatusOnline, nil
-		} else {
-			return constants.PZStatusOffline, nil
 		}
+
+		return constants.PZStatusOffline, nil
 	case "stop": // /pz stop
-		if !is_admin {
+		if !isAdmin {
 			return constants.Unauthorized, nil
 		}
 
