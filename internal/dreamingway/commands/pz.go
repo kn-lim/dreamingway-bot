@@ -43,7 +43,7 @@ func pz(i discord.Interaction) (string, error) {
 	switch *subCommand.SubCommandName {
 	case "rcon": // /pz rcon <command>
 		if !is_admin {
-			return constants.UNAUTHORIZED, nil
+			return constants.Unauthorized, nil
 		}
 
 		output, err := rcon.Run(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD"), subCommand.String("command"))
@@ -58,10 +58,10 @@ func pz(i discord.Interaction) (string, error) {
 		}
 	case "start": // /pz start
 		if !is_admin {
-			return constants.UNAUTHORIZED, nil
+			return constants.Unauthorized, nil
 		}
 
-		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZ_SERVER_START); err != nil {
+		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZServerStart); err != nil {
 			return "", err
 		}
 
@@ -79,19 +79,19 @@ func pz(i discord.Interaction) (string, error) {
 			return "", err
 		}
 
-		return constants.PZ_STATUS_ONLINE, nil
+		return constants.PZStatusOnline, nil
 	case "status": // /pz status
 		if status, _ := projectzomboid.Status(os.Getenv("PZ_HOST"), os.Getenv("PZ_RCON_PORT"), os.Getenv("PZ_RCON_PASSWORD")); status {
-			return constants.PZ_STATUS_ONLINE, nil
+			return constants.PZStatusOnline, nil
 		} else {
-			return constants.PZ_STATUS_OFFLINE, nil
+			return constants.PZStatusOffline, nil
 		}
 	case "stop": // /pz stop
 		if !is_admin {
-			return constants.UNAUTHORIZED, nil
+			return constants.Unauthorized, nil
 		}
 
-		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZ_SERVER_STOP); err != nil {
+		if err := dreamingway.SendDeferredMessage(i.ApplicationID().String(), i.Token(), constants.PZServerStop); err != nil {
 			return "", err
 		}
 
@@ -108,7 +108,7 @@ func pz(i discord.Interaction) (string, error) {
 			return "", err
 		}
 
-		return constants.PZ_STATUS_OFFLINE, nil
+		return constants.PZStatusOffline, nil
 	}
 
 	return "", errors.New("invalid pz subcommand")
