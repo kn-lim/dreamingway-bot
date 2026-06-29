@@ -8,8 +8,8 @@ import (
 	"slices"
 
 	"github.com/disgoorg/disgo/discord"
-	"github.com/kn-lim/chattingway/projectzomboid"
-	"github.com/kn-lim/chattingway/rcon"
+	"github.com/kn-lim/chattingway/v2/projectzomboid"
+	"github.com/kn-lim/chattingway/v2/rcon"
 	"github.com/kn-lim/dreamingway-bot/internal/constants"
 	"github.com/kn-lim/dreamingway-bot/internal/dreamingway"
 )

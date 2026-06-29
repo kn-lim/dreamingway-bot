@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/disgoorg/disgo/discord"
-	"github.com/kn-lim/chattingway/gamble"
+	"github.com/kn-lim/chattingway/v2/gamble"
 )
 
 // roll returns a string of the result of a dice roll

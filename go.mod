@@ -10,7 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.93.0
 	github.com/disgoorg/disgo v0.19.6
 	github.com/disgoorg/snowflake/v2 v2.0.3
-	github.com/kn-lim/chattingway v1.6.0
+	github.com/kn-lim/chattingway/v2 v2.0.1
 	github.com/knadh/koanf/parsers/json v1.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/rawbytes v1.0.0
