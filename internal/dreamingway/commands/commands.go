@@ -34,7 +34,7 @@ var (
 		"roll": {
 			Command: discord.SlashCommandCreate{
 				Name:        "roll",
-				Description: "Roll a dice with modifiers",
+				Description: "Rolls dice with modifiers",
 				Options: []discord.ApplicationCommandOption{
 					discord.ApplicationCommandOptionString{
 						Name:        "dice",

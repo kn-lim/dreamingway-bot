@@ -26,30 +26,30 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 - [urfave/cli](https://github.com/urfave/cli)
 - [zap](https://github.com/uber-go/zap)
 
-# Using the Discord Bot
+# How to Use the Discord Bot
 
 ## Discord Slash Commands
 
 | Command | Description |
 | - | - |
 | `/coinflip` | Flips a coin |
-| `/ping` | Ping |
-| `/roll` | Rolls a dice with modifiers |
+| `/ping` | Ping command |
+| `/roll` | Rolls dice with modifiers |
 
-## How to Build
+## Build
 
-From the project home directory:
+Run these commands from the project home directory:
 
 - **Endpoint Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/endpoint/`
 - **Task Function**: `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o binary/bootstrap ./cmd/task/`
 
-Zip the bootstrap binaries and upload it to the Lambda functions.
+Then compress each `bootstrap` binary into a separate ZIP file and upload each ZIP file to the related Lambda function.
 
-## Syncing Commands with Discord
+## Sync Commands with Discord
 
-1. Rename `config.example.json` to `config.json` and add in the values.
-2. From the project directory, run the following command: `go run .`
-
+1. Rename `config.example.json` to `config.json`.
+2. Add the values to `config.json`.
+3. Run this command from the project directory: `go run .`
 
 ```
 NAME:
@@ -88,7 +88,7 @@ GLOBAL OPTIONS:
 | `PZ_DISCORD_ADMIN_ROLE` | Discord Admin Role for the Project Zomboid |
 | `PZ_HOST` | Project Zomboid Host IP/URL |
 | `PZ_HOST_INSTANCE_ID` | AWS Instance ID of the Project Zomboid Host |
-| `PZ_HOST_REGION` | AWS Instance ID of the Project Zomboid Host |
+| `PZ_HOST_REGION` | AWS Region of the Project Zomboid Host |
 | `PZ_RCON_PASSWORD` | RCON Password of the Project Zomboid server |
 | `PZ_RCON_PORT` | RCON Port of the Project Zomboid server |
 
@@ -96,14 +96,14 @@ GLOBAL OPTIONS:
 
 ### Terraform
 
-To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https://github.com/kn-lim/terraform-aws-chattingway/).
+To create **dreamingway-bot** on AWS, use the [Terraform module](https://github.com/kn-lim/terraform-aws-chattingway/).
 
 ### Manual
 
 1. Create the **endpoint** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `arm64`.
-2. Add an API Gateway triger to the **endpoint** Lambda function.
+2. Add an API Gateway trigger to the **endpoint** Lambda function.
     - Use the following settings:
       - **Intent**: Create a new API
       - **API type**: HTTP API
@@ -111,21 +111,23 @@ To quickly spin up **dreamingway-bot** on AWS, use the [Terraform module](https:
 3. Create the **task** Lambda function on AWS.
     - For the `Runtime`, select `Amazon Linux 2023`.
     - For the `Architecture`, select `arm64`.
-4. Build the **endpoint** and **task** binaries as `bootstrap`.
-5. Archive the `bootstrap` binaries in `bootstrap.zip` files and upload it to the Lambda functions.
-6. In the `Configuration` tab, add in the required environment variables to the Lambda functions.
-7. Change the `Timeout` of the **task** Lambda function to a value greater than 3 seconds.
-    - The `Timeout` of the **endpoint** Lambda function can stay as 3 seconds to follow Discord's requirements.
+4. Build the **endpoint** and **task** binaries. Name each binary `bootstrap`.
+5. Compress each `bootstrap` binary into a separate `bootstrap.zip` file.
+6. Upload each ZIP file to the related Lambda function.
+7. In the `Configuration` tab, add the required environment variables to each Lambda function.
+8. Change the `Timeout` of the **task** Lambda function to more than 3 seconds.
+    - Keep the `Timeout` of the **endpoint** Lambda function at 3 seconds. Discord requires a response in 3 seconds.
 
 ## Discord Setup
 
 ### Interactions Endpoint URL
 
-Get the **endpoint** Lambda API Gateway triggers' `API endpoint` and add it to the Discord bot's `Interactions Endpoint URL` in the [Discord Developer Portal](https://discord.com/developers/).
+1. Find the `API endpoint` value of the API Gateway trigger on the **endpoint** Lambda function.
+2. Add this value to the `Interactions Endpoint URL` field of the bot in the [Discord Developer Portal](https://discord.com/developers/).
 
 ### OAuth2 Scopes
 
-In the OAuth2 URL Generator, give the following scopes when adding the bot to a server:
+When you add the bot to a server, use the OAuth2 URL Generator. Give the bot these scopes and permissions:
 
 #### Scopes
 
