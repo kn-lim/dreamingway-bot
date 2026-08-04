@@ -10,7 +10,6 @@
 ![GitHub Workflow Status - Build](https://img.shields.io/github/actions/workflow/status/kn-lim/dreamingway-bot/build.yaml)
 ![GitHub Workflow Status - Tests](https://img.shields.io/github/actions/workflow/status/kn-lim/dreamingway-bot/test.yaml?label=tests)
 [![codecov](https://codecov.io/gh/kn-lim/dreamingway-bot/branch/main/graph/badge.svg)](https://codecov.io/gh/kn-lim/dreamingway-bot)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kn-lim/dreamingway-bot)](https://goreportcard.com/report/github.com/kn-lim/dreamingway-bot)
 ![License](https://img.shields.io/github/license/kn-lim/dreamingway-bot)
 
 A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
