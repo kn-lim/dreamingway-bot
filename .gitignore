@@ -21,9 +21,13 @@
 go.work
 go.work.sum
 
-# env file
-.env
+# Go
+bootstrap
+bootstrap.zip
 
-config.json
-binary/
 *.code-workspace
+
+# Discord Configs
+config.json
+dreamingway.json
+lplaziv.json
