@@ -34,17 +34,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	}
 
 	// Get command
-	cmds, err := commands.AllCommands()
-	if err != nil {
-		utils.Logger.Errorw("couldn't get commands",
-			"error", err,
-		)
-		return dreamingway.SendDeferredMessage(
-			interaction.ApplicationID().String(),
-			interaction.Token(),
-			"**Error**! Could not get commands.",
-		)
-	}
+	cmds := commands.AllCommands()
 	cmd, ok := cmds[interaction.(discord.ApplicationCommandInteraction).Data.CommandName()]
 	if !ok {
 		utils.Logger.Errorw("command does not exist",

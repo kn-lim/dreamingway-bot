@@ -35,7 +35,7 @@ func SyncGlobalCommands(client rest.Rest, applicationID snowflake.ID, commands m
 		)
 	}
 
-	var cmdSlice []discord.ApplicationCommandCreate
+	cmdSlice := make([]discord.ApplicationCommandCreate, 0, len(commands))
 	for _, cmd := range commands {
 		cmdSlice = append(cmdSlice, cmd.Command)
 	}
@@ -88,7 +88,7 @@ func SyncGuildCommands(client rest.Rest, applicationID, guildID snowflake.ID, co
 		)
 	}
 
-	var cmdSlice []discord.ApplicationCommandCreate
+	cmdSlice := make([]discord.ApplicationCommandCreate, 0, len(commands))
 	for _, cmd := range commands {
 		cmdSlice = append(cmdSlice, cmd.Command)
 	}

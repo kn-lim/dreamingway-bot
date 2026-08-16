@@ -21,7 +21,6 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 - [chattingway](https://github.com/kn-lim/chattingway)
 - [disgo](https://github.com/disgoorg/disgo)
 - [koanf](https://github.com/knadh/koanf)
-- [mergo](https://github.com/darccio/mergo)
 - [urfave/cli](https://github.com/urfave/cli)
 - [zap](https://github.com/uber-go/zap)
 
@@ -33,6 +32,7 @@ A personal Discord bot to handle miscellaneous tasks hosted on AWS Lambda.
 | - | - |
 | `/coinflip` | Flips a coin |
 | `/ping` | Ping command |
+| `/pz` | Manages the Project Zomboid server |
 | `/roll` | Rolls dice with modifiers |
 
 ## Build
@@ -46,9 +46,9 @@ Then compress each `bootstrap` binary into a separate ZIP file and upload each Z
 
 ## Sync Commands with Discord
 
-1. Rename `config.example.json` to `config.json`.
-2. Add the values to `config.json`.
-3. Run this command from the project directory: `go run .`
+1. Copy `config.example.json` to a new file, for example `dreamingway.json`.
+2. Add the values for your bot to the new file.
+3. Run this command from the project directory: `go run . --config dreamingway.json`
 
 ```
 NAME:
@@ -61,8 +61,21 @@ GLOBAL OPTIONS:
    --verbose, -v               enable verbose logging (default: false)
    --config string, -c string  path to the configuration file (default: "config.json")
    --config-string string      configuration as a json string
+   --dry-run                   show the commands to publish, without any change to discord
    --help, -h                  show help
 ```
+
+Before you sync a config, run `--dry-run` to see what it will publish and delete. Discord does not change during a dry run.
+
+### Running Multiple Bots
+
+One repository can serve several Discord bots. Each bot needs its own config file and its own Discord application.
+
+```sh
+go run . --config dreamingway.json
+```
+
+The endpoint and task binaries are identical for every bot. Bots differ only by their Lambda environment variables and their config file.
 
 ## Environment Variables
 

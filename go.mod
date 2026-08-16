@@ -3,7 +3,6 @@ module github.com/kn-lim/dreamingway-bot
 go 1.26
 
 require (
-	dario.cat/mergo v1.0.2
 	github.com/aws/aws-lambda-go v1.54.0
 	github.com/aws/aws-sdk-go-v2 v1.43.6
 	github.com/aws/aws-sdk-go-v2/config v1.32.37
