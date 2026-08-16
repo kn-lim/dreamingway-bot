@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"dario.cat/mergo"
 	"github.com/disgoorg/disgo/discord"
 )
 
@@ -86,13 +85,13 @@ var (
 )
 
 // AllCommands returns a map of all commands, both global and guild-specific.
-func AllCommands() (map[string]Command, error) {
-	allCommands := make(map[string]Command)
-	if err := mergo.Merge(&allCommands, GlobalCommands); err != nil {
-		return nil, err
+func AllCommands() map[string]Command {
+	allCommands := make(map[string]Command, len(GlobalCommands)+len(Commands))
+	for key, cmd := range GlobalCommands {
+		allCommands[key] = cmd
 	}
-	if err := mergo.Merge(&allCommands, Commands); err != nil {
-		return nil, err
+	for key, cmd := range Commands {
+		allCommands[key] = cmd
 	}
-	return allCommands, nil
+	return allCommands
 }
