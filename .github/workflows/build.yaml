@@ -27,7 +27,7 @@ jobs:
       run: |
         go run . --config-string '${{ secrets.DREAMINGWAY_DISCORD_CONFIG }}'
 
-        go run . --config-string '${{ secrets.LPLAZIV_DISCORD_CONFIG }}'
+        # go run . --config-string '${{ secrets.LPLAZIV_DISCORD_CONFIG }}'
 
     - name: Build endpoint binary for Lambda
       run: |
@@ -57,14 +57,14 @@ jobs:
           --query '[FunctionName,LastUpdateStatus]' \
           --output text
 
-        aws s3 cp endpoint.zip \
-          s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/endpoint/bootstrap.zip
-        aws lambda update-function-code \
-          --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
-          --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
-          --s3-key lambda/lplaziv-bot/endpoint/bootstrap.zip \
-          --query '[FunctionName,LastUpdateStatus]' \
-          --output text
+        # aws s3 cp endpoint.zip \
+        #   s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/endpoint/bootstrap.zip
+        # aws lambda update-function-code \
+        #   --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
+        #   --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
+        #   --s3-key lambda/lplaziv-bot/endpoint/bootstrap.zip \
+        #   --query '[FunctionName,LastUpdateStatus]' \
+        #   --output text
 
     - name: Upload task binary to S3 and Lambda
       run: |
@@ -77,11 +77,11 @@ jobs:
           --query '[FunctionName,LastUpdateStatus]' \
           --output text
 
-        aws s3 cp task.zip \
-          s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/task/bootstrap.zip
-        aws lambda update-function-code \
-          --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_TASK_FUNCTION_NAME }} \
-          --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
-          --s3-key lambda/lplaziv-bot/task/bootstrap.zip \
-          --query '[FunctionName,LastUpdateStatus]' \
-          --output text
+        # aws s3 cp task.zip \
+        #   s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/task/bootstrap.zip
+        # aws lambda update-function-code \
+        #   --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_TASK_FUNCTION_NAME }} \
+        #   --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
+        #   --s3-key lambda/lplaziv-bot/task/bootstrap.zip \
+        #   --query '[FunctionName,LastUpdateStatus]' \
+        #   --output text

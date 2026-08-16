@@ -125,6 +125,6 @@ var Commands = map[string]Command{
 		},
 		Handler: counterAdmin,
 	},
-	"test1": newCounter("test1", "Test #1 counter"),
-	"test2": newCounter("test2", "Test #2 counter"),
+	// "test1": newCounter("test1", "Test #1 counter"),
+	// "test2": newCounter("test2", "Test #2 counter"),
 }
