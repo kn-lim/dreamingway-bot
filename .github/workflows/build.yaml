@@ -60,7 +60,7 @@ jobs:
         aws s3 cp endpoint.zip \
           s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/endpoint/bootstrap.zip
         aws lambda update-function-code \
-          --function-name ${{ vars.lplaziv_AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
+          --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_ENDPOINT_FUNCTION_NAME }} \
           --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
           --s3-key lambda/lplaziv-bot/endpoint/bootstrap.zip \
           --query '[FunctionName,LastUpdateStatus]' \
@@ -80,7 +80,7 @@ jobs:
         aws s3 cp task.zip \
           s3://${{ secrets.AWS_S3_BUCKET }}/lambda/lplaziv-bot/task/bootstrap.zip
         aws lambda update-function-code \
-          --function-name ${{ vars.lplaziv_AWS_LAMBDA_TASK_FUNCTION_NAME }} \
+          --function-name ${{ vars.LPLAZIV_AWS_LAMBDA_TASK_FUNCTION_NAME }} \
           --s3-bucket ${{ secrets.AWS_S3_BUCKET }} \
           --s3-key lambda/lplaziv-bot/task/bootstrap.zip \
           --query '[FunctionName,LastUpdateStatus]' \
