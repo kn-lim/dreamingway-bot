@@ -34,7 +34,7 @@ func handler(ctx context.Context, rawInteraction json.RawMessage) error {
 	}
 
 	// Get command
-	cmds := commands.AllCommands()
+	cmds := commands.Commands
 	cmd, ok := cmds[interaction.(discord.ApplicationCommandInteraction).Data.CommandName()]
 	if !ok {
 		utils.Logger.Errorw("command does not exist",

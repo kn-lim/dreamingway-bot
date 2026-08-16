@@ -107,7 +107,7 @@ func main() {
 			}
 
 			// Validate and select global commands from the config.
-			globalCmds, err := commands.FilterCommands(commands.GlobalCommands, cfg.GlobalCommands)
+			globalCmds, err := commands.FilterCommands(commands.Commands, cfg.GlobalCommands)
 			if err != nil {
 				return cli.Exit(fmt.Sprintf("failed to select global commands: %v", err), 1)
 			}
@@ -121,7 +121,7 @@ func main() {
 					return cli.Exit(fmt.Sprintf("failed to parse guild ID: %v", err), 1)
 				}
 
-				guildCmds, err := commands.FilterCommands(commands.AllCommands(), server.Commands)
+				guildCmds, err := commands.FilterCommands(commands.Commands, server.Commands)
 				if err != nil {
 					return cli.Exit(fmt.Sprintf("failed to select commands for guild %s: %v", server.GuildID, err), 1)
 				}
