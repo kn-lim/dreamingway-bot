@@ -1,3 +1,4 @@
+//nolint:unused // TODO: Remove when counter commands are being used
 package commands
 
 import (
