@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.47.1
 	github.com/aws/aws-sdk-go-v2/config v1.33.6
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.110.0
-	github.com/disgoorg/disgo v0.19.6
+	github.com/disgoorg/disgo v0.20.0
 	github.com/disgoorg/snowflake/v2 v2.0.3
 	github.com/kn-lim/chattingway/v2 v2.4.0
 	github.com/knadh/koanf/parsers/json v1.0.1
