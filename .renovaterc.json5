@@ -1,7 +1,53 @@
 {
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>kn-lim/homelab//.renovaterc.json5",
-    "github>kn-lim/homelab//configs/renovate/github-actions.json5",
-    "github>kn-lim/homelab//configs/renovate/golang.json5"
+    // https://github.com/home-operations/renovate-presets
+    "github>home-operations/renovate-presets#12.0.0",
+  ],
+  schedule: ["every weekend"],
+  "pre-commit": {
+    enabled: true,
+  },
+  postUpdateOptions: ["gomodTidy", "gomodUpdateImportPaths"],
+  packageRules: [
+    {
+      matchManagers: ["gomod"],
+      matchDepNames: ["go"],
+      matchDepTypes: ["golang"],
+      rangeStrategy: "bump",
+    },
+    {
+      description: "Only bump the go directive on new minor Go releases",
+      matchManagers: ["gomod"],
+      matchDepNames: ["go"],
+      matchDepTypes: ["golang"],
+      matchUpdateTypes: ["patch"],
+      enabled: false,
+    },
+    {
+      description: "Never mark an update as breaking. A maintainer adds the marker at merge time if the update breaks this repository.",
+      matchPackageNames: ["*"],
+      commitMessagePrefix: "{{semanticCommitType}}({{semanticCommitScope}}):",
+    },
+    {
+      description: "Label updates that can break the code: majors, and minors of 0.x versions",
+      matchUpdateTypes: ["major"],
+      addLabels: ["breaking"],
+    },
+    {
+      matchUpdateTypes: ["minor"],
+      matchCurrentVersion: "/^v?0\\./",
+      addLabels: ["breaking"],
+    },
+    {
+      description: "Reset the type that the major and 0.x minor preset rules change to feat",
+      matchManagers: ["github-actions"],
+      semanticCommitType: "ci",
+    },
+    {
+      description: "Reset the type that the major and 0.x minor preset rules change to feat",
+      matchManagers: ["mise", "pre-commit"],
+      semanticCommitType: "chore",
+    },
   ],
 }
