@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'LICENSE'
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/build.yaml'
   workflow_dispatch:
 
 jobs:
