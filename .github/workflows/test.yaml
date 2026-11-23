@@ -1,18 +1,20 @@
+name: Run Tests
+
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'LICENSE'
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/test.yaml'
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'LICENSE'
-
-name: Run Tests
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/test.yaml'
 
 jobs:
   tests:
