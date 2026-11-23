@@ -40,6 +40,38 @@
       addLabels: ["breaking"],
     },
     {
+      matchUpdateTypes: ["major"],
+      addLabels: ["type/major"],
+    },
+    {
+      matchUpdateTypes: ["minor"],
+      addLabels: ["type/minor"],
+    },
+    {
+      matchUpdateTypes: ["patch"],
+      addLabels: ["type/patch"],
+    },
+    {
+      matchUpdateTypes: ["digest"],
+      addLabels: ["type/digest"],
+    },
+    {
+      matchDatasources: ["docker"],
+      addLabels: ["renovate/container"],
+    },
+    {
+      matchDatasources: ["helm"],
+      addLabels: ["renovate/helm"],
+    },
+    {
+      matchManagers: ["github-actions"],
+      addLabels: ["renovate/github-action"],
+    },
+    {
+      matchDatasources: ["github-releases"],
+      addLabels: ["renovate/github-release"],
+    },
+    {
       description: "Reset the type that the major and 0.x minor preset rules change to feat",
       matchManagers: ["github-actions"],
       semanticCommitType: "ci",
